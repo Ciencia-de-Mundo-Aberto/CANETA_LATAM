@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="hero">
+  <h1>{{ t('setup_title') }}</h1>
+  <p>{{ t('setup_intro') }}</p>
+</section>
+
+<div class="langs">
+  {% for l, n in [('pt_BR','Português'),('es','Español'),('en','English')] %}
+  <button class="{{ 'primary' if cfg.lang == l else 'ghost' }}" hx-post="/setup/lang" hx-vals='{"lang": "{{ l }}"}'>{{ n }}</button>
+  {% endfor %}
+</div>
+
+<form hx-post="/setup/save" x-data="{ provider: '{{ cfg.provider }}', group: '{{ PROVIDERS[cfg.provider]['group'] if cfg.provider in PROVIDERS else 'none' }}' }">
+  <input type="hidden" name="lang" value="{{ cfg.lang }}">
+  <h2>1. {{ t('setup_mode') }}</h2>
+  <div class="cards four">
+    {% for g, icon in [('paid','💳'),('free','🆓'),('local','💻'),('none','✋')] %}
+    <label class="card choice" :class="group == '{{ g }}' && 'selected'">
+      <input type="radio" name="group" value="{{ g }}" x-model="group" @change="provider = {'paid':'{{ 'claude-cli' if clis.claude else ('codex-cli' if clis.codex else 'anthropic-api') }}','free':'nvidia-nim','local':'ollama','none':'none'}[group]">
+      <h3>{{ icon }} {{ t('group_' ~ g) }}</h3>
+      <p>{{ t('group_' ~ g ~ '_desc') }}</p>
+    </label>
+    {% endfor %}
+  </div>
+
+  <h2 x-show="group != 'none'">2. {{ t('setup_provider') }}</h2>
+  <div class="providers" x-show="group != 'none'">
+    {% for pid, spec in PROVIDERS.items() if pid != 'none' %}
+    <label class="provider" x-show="group == '{{ spec.group }}'">
+      <input type="radio" name="_provider_choice" value="{{ pid }}" x-model="provider">
+      <strong>{{ spec.label }}</strong>
+      {% if spec.binary %}
+        {% if clis[spec.binary] %}<span class="badge ok">{{ t('detected') }}</span>{% else %}<span class="badge">{{ t('not_installed') }}</span>{% endif %}
+      {% endif %}
+      {% if spec.needs_key and has_key.get(pid) %}<span class="badge ok">{{ t('key_saved') }}</span>{% endif %}
+      <small class="muted">{{ t('provider_' ~ pid) }}</small>
+    </label>
+    {% endfor %}
+  </div>
+  <input type="hidden" name="provider_id" x-bind:value="provider">
+
+  <div class="panel" x-show="group != 'none'">
+    <template x-if="['anthropic-api','openai-api','nvidia-nim'].includes(provider)">
+      <label>{{ t('api_key') }} <input type="password" name="api_key" autocomplete="off" placeholder="{{ t('api_key_ph') }}"></label>
+    </template>
+    <p class="help" x-show="provider == 'nvidia-nim'">{{ t('nim_help') | safe }}</p>
+    <p class="help" x-show="provider == 'ollama'">{{ t('ollama_help') | safe }}</p>
+    <p class="help" x-show="provider == 'codex-free'">{{ t('codex_free_help') | safe }}</p>
+    <p class="help" x-show="['claude-cli','codex-cli'].includes(provider)">{{ t('cli_help') }}</p>
+    <label>{{ t('model') }}
+      <input name="model" value="{{ cfg.model }}" placeholder="{{ t('model_ph') }}">
+    </label>
+    <small class="muted">{{ t('recommended_models') }}</small>
+    <label x-show="['nvidia-nim','ollama'].includes(provider)">{{ t('base_url') }} <input name="base_url" value="{{ cfg.base_url }}" placeholder="{{ t('base_url_ph') }}"></label>
+    <div class="row">
+      <button type="button" class="ghost" hx-post="/setup/test" hx-include="closest form" hx-target="#test-result" hx-indicator="#busy-test">{{ t('test_connection') }}</button>
+      <button type="button" class="ghost" x-show="['nvidia-nim','ollama'].includes(provider)" hx-post="/setup/models" hx-include="closest form" hx-vals='{"test": "1"}' hx-target="#test-result" hx-indicator="#busy-test">{{ t('test_models') }}</button>
+      <span id="busy-test" class="htmx-indicator">{{ t('testing') }}</span>
+    </div>
+    <div id="test-result"></div>
+  </div>
+
+  <div class="panel" x-show="group == 'none'">
+    <p>{{ t('none_desc') }}</p>
+  </div>
+
+  <h2>3. {{ t('setup_grammar') }}</h2>
+  <div class="panel">
+    <label><input type="radio" name="languagetool" value="off" {{ 'checked' if cfg.languagetool == 'off' }}> {{ t('lt_off') }}</label>
+    <label><input type="radio" name="languagetool" value="public" {{ 'checked' if cfg.languagetool == 'public' }}> {{ t('lt_public') }}</label>
+    <label><input type="radio" name="languagetool" value="local" {{ 'checked' if cfg.languagetool == 'local' }}> {{ t('lt_local') }}</label>
+  </div>
+
+  <h2>4. {{ t('setup_folder') }}</h2>
+  <div class="panel"><input name="projects_dir" value="{{ cfg.projects_dir }}"></div>
+
+  <p class="privacy">🔒 {{ t('privacy_note') }}</p>
+  <button class="primary big">{{ t('save_start') }}</button>
+</form>
+
+<h2 id="recursos">5. {{ t('extras_title') }}</h2>
+<p class="muted">{{ t('extras_intro') }}</p>
+<div class="cards">
+  <div class="card">
+    <h3>🔍 {{ t('extra_semantic') }}</h3>
+    <p class="small">{{ t('extra_semantic_desc') }}</p>
+    {% if semantic_on %}
+      <p><span class="badge ok">{{ t('active') }}</span></p>
+      <button class="ghost small" hx-post="/extras/semantic/off">{{ t('turn_off') }}</button>
+    {% elif semantic_ready %}
+      <button hx-post="/extras/semantic" hx-target="#job-extras">{{ t('turn_on') }}</button>
+    {% else %}
+      <button hx-post="/extras/semantic" hx-target="#job-extras">{{ t('activate_download') }} ({{ SEMANTIC_SIZE }})</button>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h3>🖨 {{ t('extra_ocr') }}</h3>
+    <p class="small">{{ t('extra_ocr_desc') }}</p>
+    {% if ocr_available %}
+      <p><span class="badge ok">{{ t('installed') }}</span></p>
+    {% else %}
+      <button hx-post="/extras/ocr" hx-target="#job-extras">{{ t('activate_download') }} ({{ OCR_SIZE }})</button>
+    {% endif %}
+  </div>
+</div>
+<div id="job-extras"></div>
+{% endblock %}

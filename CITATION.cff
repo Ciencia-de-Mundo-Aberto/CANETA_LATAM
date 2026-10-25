@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Se usar a CANETA, cite-a assim. / If you use CANETA, please cite it as below."
+title: "CANETA — Central de Assistência e Navegação para Escrita de Textos Avançados"
+abstract: >-
+  Assistente aberto de escrita científica, seção por seção, focado em revistas Diamond Open Access
+  da América Latina, com citações fundamentadas em fontes abertas (SciELO, DOAJ, LA Referencia).
+type: software
+authors:
+  - name: "CANETA contributors"
+license: AGPL-3.0-or-later
+version: 0.1.2
+date-released: 2026-10-25
+keywords:
+  - diamond open access
+  - scientific writing
+  - SciELO
+  - Latin America
+  - open science

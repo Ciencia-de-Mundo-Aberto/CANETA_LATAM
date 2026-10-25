@@ -1,0 +1,61 @@
+[project]
+name = "caneta"
+version = "0.1.2"
+description = "CANETA — Central de Assistência e Navegação para Escrita de Textos Avançados: assistente aberto de escrita científica, seção por seção, focado em revistas Diamond Open Access da América Latina."
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE", "LICENSE-docs"]
+requires-python = ">=3.11"
+authors = [{ name = "CANETA contributors" }]
+keywords = ["diamond open access", "scielo", "scientific writing", "latin america", "open science"]
+dependencies = [
+    "latam-oa-mcp",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.9",
+    "pyyaml>=6.0",
+    "httpx>=0.27",
+    "pypandoc-binary>=1.13",
+    "openai>=1.40",
+    "anthropic>=0.40",
+    "keyring>=25.0",
+]
+
+[project.optional-dependencies]
+ocr = ["latam-oa-mcp[ocr]"]
+
+[project.scripts]
+caneta = "caneta.__main__:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6", "respx>=0.21"]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+latam-oa-mcp = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/caneta"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"MANIFESTO.md" = "caneta/content/MANIFESTO.md"  # single source; shown on the About page
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501", "B008"]  # B008: FastAPI Form()/File() defaults are idiomatic
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["network: hits real external APIs (opt-in: -m network)"]
+addopts = "-m 'not network'"

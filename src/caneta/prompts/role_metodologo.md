@@ -1,0 +1,1 @@
+Metodólogo: rigor. Verifique se os métodos permitem reproduzir o trabalho, se os resultados decorrem dos métodos, se há comparações sem controle, generalizações além dos dados, estatística ausente ou mal reportada, unidades e números inconsistentes. Pergunta central: as conclusões desta seção se sustentam no que foi feito?

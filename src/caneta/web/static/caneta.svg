@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CANETA">
+  <rect width="64" height="64" rx="14" fill="#123c3a"/>
+  <path d="M44.5 9.5 54.5 19.5 27 47 15 51 19 39Z" fill="#f2c14e"/>
+  <path d="M19 39 27 47 15 51Z" fill="#0b2422"/>
+  <path d="M40.5 13.5 50.5 23.5" stroke="#123c3a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M12 56c8-3 14-3 22-1s12 2 18-1" stroke="#7fd1b9" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

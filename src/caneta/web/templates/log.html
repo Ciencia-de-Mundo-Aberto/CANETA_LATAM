@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ t('log_title') }}</h1>
+<p>{{ t('log_intro') }}</p>
+<table class="list small">
+  <tr><th>{{ t('when') }}</th><th>{{ t('event') }}</th><th>{{ t('details') }}</th></tr>
+  {% for e in events %}
+  <tr class="{{ 'ai' if e.event == 'ai_call' }}">
+    <td class="muted">{{ e.at[:19].replace('T',' ') }}</td>
+    <td>{{ e.event }}</td>
+    <td>{% for k, v in e.items() if k not in ('at','event') %}<span class="kv">{{ k }}=<code>{{ v }}</code></span> {% endfor %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

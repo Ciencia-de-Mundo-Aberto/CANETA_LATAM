@@ -1,0 +1,10 @@
+{% if tested %}
+<table class="list small">
+  <tr><th>{{ t('model') }}</th><th>{{ t('status') }}</th><th>s</th><th></th></tr>
+  {% for r in tested %}
+  <tr><td><code>{{ r.model }}</code></td><td>{{ '✔' if r.ok else '✕' }} {{ r.message[:60] }}</td><td>{{ r.duration_s }}</td>
+  <td>{% if r.ok %}<button type="button" class="small" onclick="this.closest('form').querySelector('[name=model]').value='{{ r.model }}'">{{ t('use_this') }}</button>{% endif %}</td></tr>
+  {% endfor %}
+</table>
+{% endif %}
+<p class="small muted">{{ models | length }} {{ t('models_available') }}: {{ models[:30] | join(', ') }}</p>

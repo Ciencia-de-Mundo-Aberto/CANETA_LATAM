@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}{{ t('nav_about') }} · CANETA{% endblock %}
+{% block body %}
+<article class="prose">
+  {{ about_html | safe }}
+  <hr>
+  <section id="manifesto">
+    {{ manifesto_html | safe }}
+  </section>
+  <p class="muted small">CANETA {{ version }}</p>
+</article>
+{% endblock %}

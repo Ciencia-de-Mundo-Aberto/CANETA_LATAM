@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ t('proposal_' ~ prop.kind) }} — {{ sec.title }}</h1>
+<p class="muted">{{ prop.provider }} {{ prop.model }} · {{ t('proposal_hint') }}</p>
+{% for w in prop.warnings %}<div class="notice warn">⚠ {{ w }}</div>{% endfor %}
+{% if prop.notes %}<div class="notice">{{ prop.notes }}</div>{% endif %}
+{% if prop.edits %}
+<h3>{{ t('edits') }}</h3>
+<ul class="small">{% for e in prop.edits %}<li><del>{{ e.find }}</del> → <ins>{{ e.replace }}</ins> <span class="muted">{{ e.justificativa }}</span></li>{% endfor %}</ul>
+{% endif %}
+<div class="cols two">
+  <div><h3>{{ t('changes') }}</h3><div class="diff-view">{{ diff | safe }}</div></div>
+  <form hx-post="/proposals/{{ pid }}/accept">
+    <h3>{{ t('final_text') }}</h3>
+    <textarea name="text" rows="24">{{ prop.proposed }}</textarea>
+    <div class="row">
+      <button class="primary">{{ t('accept_proposal') }}</button>
+      <button type="button" class="ghost" hx-post="/proposals/{{ pid }}/discard">{{ t('discard') }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

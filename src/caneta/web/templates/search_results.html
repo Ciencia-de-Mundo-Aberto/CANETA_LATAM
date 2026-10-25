@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ t('results_title') }}</h1>
+<p>{{ t('results_intro') }}</p>
+{% if not papers %}<p class="muted">{{ t('no_results') }} <a href="/p/{{ proj.slug }}/references">{{ t('back') }}</a></p>{% endif %}
+<form hx-post="/p/{{ proj.slug }}/references/add">
+  <input type="hidden" name="search_id" value="{{ search_id }}">
+  {% for p in papers %}
+  <label class="result">
+    <input type="checkbox" name="picks" value="{{ loop.index0 }}" {{ 'disabled' if p.in_project }}>
+    <div>
+      <strong>{{ p.title }}</strong> <span class="muted">({{ p.year or 's.d.' }})</span>
+      {% if p.in_project %}<span class="badge ok">{{ t('already_added') }}</span>{% endif %}
+      {% if p.semantic is defined %}<span class="badge" title="{{ t('semantic_hint') }}">≈ {{ (p.semantic * 100) | round | int }}%</span>{% endif %}
+      <div class="small muted">{{ (p.authors or [])[:4] | join('; ') }} — <em>{{ p.journal }}</em> · {{ p.found_in | join(', ') }}{% if p.diamond %} · 💎 Diamond{% endif %}</div>
+      {% if p.abstract %}<p class="small">{{ p.abstract }}</p>{% endif %}
+      {% if p.doi %}<a class="small" href="https://doi.org/{{ p.doi }}" target="_blank" rel="noopener">doi:{{ p.doi }}</a>{% endif %}
+    </div>
+  </label>
+  {% endfor %}
+  {% if papers %}<button class="primary">{{ t('add_selected') }}</button>{% endif %}
+</form>
+{% endblock %}

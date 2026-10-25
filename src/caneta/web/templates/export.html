@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ t('export_title') }}</h1>
+{% set done = proj.sections | selectattr('state', 'equalto', 'approved') | list | length %}
+<p>{{ t('export_progress', done=done, total=proj.sections|length) }}</p>
+{% if proj.journal %}<p>{{ t('current_journal') }}: <strong>{{ proj.journal.name }}</strong>{% if templates %} · {{ t('template_files') }}: {{ templates | join(', ') }}{% endif %}</p>{% endif %}
+
+<form class="row" hx-post="/p/{{ proj.slug }}/csl" hx-trigger="change">
+  <label>{{ t('citation_style') }}
+    <select name="csl">{% for k, n in [('apa','APA'),('abnt','ABNT'),('vancouver','Vancouver')] %}<option value="{{ k }}" {{ 'selected' if proj.data.get('csl','apa') == k }}>{{ n }}</option>{% endfor %}</select>
+  </label>
+</form>
+
+<div class="cards four">
+  <a class="card button-card" href="/p/{{ proj.slug }}/export/docx">📝 Word (.docx)</a>
+  <a class="card button-card" href="/p/{{ proj.slug }}/export/md">Ⓜ Markdown</a>
+  <a class="card button-card" href="/p/{{ proj.slug }}/export/tex">LaTeX (.zip)</a>
+  {% if has_tex %}<a class="card button-card" href="/p/{{ proj.slug }}/export/pdf">PDF</a>{% else %}<span class="card button-card muted" title="{{ t('no_tex') }}">PDF ✕</span>{% endif %}
+  <a class="card button-card" href="/p/{{ proj.slug }}/export/bib">BibTeX</a>
+  <a class="card button-card" href="/p/{{ proj.slug }}/export/csljson">CSL-JSON</a>
+</div>
+<p class="small muted">{{ t('export_note') }}</p>
+
+<h2>💾 {{ t('checkpoint_title') }}</h2>
+<p>{{ t('checkpoint_desc') }}</p>
+<div class="row">
+  <a class="button primary" href="/p/{{ proj.slug }}/checkpoint">{{ t('download_checkpoint') }}</a>
+  <a class="button ghost" href="/p/{{ proj.slug }}/checkpoint?material=0">{{ t('download_checkpoint_light') }}</a>
+</div>
+{% endblock %}

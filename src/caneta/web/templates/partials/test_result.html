@@ -1,0 +1,1 @@
+<div class="notice {{ 'ok' if result.ok else 'err' }}">{{ '✔' if result.ok else '✕' }} {{ result.message }}{% if result.duration_s %} <span class="muted">({{ result.duration_s }}s)</span>{% endif %}</div>

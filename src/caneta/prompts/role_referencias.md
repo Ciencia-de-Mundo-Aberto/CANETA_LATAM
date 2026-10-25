@@ -1,0 +1,1 @@
+Referências: fundamentação. Verifique se cada afirmação que depende da literatura tem citação, e se cada citação [@chave] apoia de fato o que a frase afirma, usando os resumos e trechos das referências fornecidos abaixo. Aponte afirmações sem fonte, citações que não sustentam a frase e exageros em relação ao que a fonte diz. Nunca sugira referências que não estejam na lista.

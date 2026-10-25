@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}{{ sec.title }} · {{ proj.title }}{% endblock %}
+{% block body %}
+<div class="workspace">
+  <aside class="sidebar">
+    <h3 class="proj-title">{{ proj.title }}</h3>
+    <ol class="sections">
+      {% for s in proj.sections %}
+      <li class="{{ 'current' if s.id == sec.id }} st-{{ s.state }}">
+        <a href="/p/{{ proj.slug }}/s/{{ s.id }}">{{ s.title }}</a>
+        <span class="badge st-{{ s.state }}" title="{{ t('state_' ~ s.state) }}">{{ t('state_' ~ s.state) }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    <details>
+      <summary>+ {{ t('add_section') }}</summary>
+      <form hx-post="/p/{{ proj.slug }}/sections/add" class="stack">
+        <input name="title" placeholder="{{ t('section_title') }}" required>
+        <select name="kind"><option value="">{{ t('kind_auto') }}</option>{% for k in KINDS %}<option value="{{ k }}">{{ t('kind_' ~ k) }}</option>{% endfor %}</select>
+        <button>{{ t('add') }}</button>
+      </form>
+    </details>
+    <p class="muted small">{{ t('sidebar_hint') }}</p>
+  </aside>
+
+  <section class="editor-col">
+    <div class="sec-head">
+      <form class="inline" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/meta" hx-trigger="change">
+        <input class="sec-title" name="title" value="{{ sec.title }}">
+        <select name="kind" title="{{ t('kind') }}">{% for k in KINDS %}<option value="{{ k }}" {{ 'selected' if k == sec.kind }}>{{ t('kind_' ~ k) }}</option>{% endfor %}</select>
+      </form>
+      <span class="badge big st-{{ sec.state }}">{{ t('state_' ~ sec.state) }}</span>
+      <span class="spacer"></span>
+      <button class="ghost small" title="{{ t('move_up') }}" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/move" hx-vals='{"delta": -1}'>↑</button>
+      <button class="ghost small" title="{{ t('move_down') }}" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/move" hx-vals='{"delta": 1}'>↓</button>
+      <button class="ghost small danger" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/delete" hx-confirm="{{ t('confirm_delete') }}">🗑</button>
+    </div>
+
+    <p class="guide">{{ t('guide_' ~ sec.kind) }}</p>
+
+    {% if sec.state == 'approved' %}
+      <div class="notice ok">✔ {{ t('approved_notice') }}
+        <button class="ghost" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/reopen">{{ t('reopen') }}</button>
+        {% if next_sec %}<a class="button" href="/p/{{ proj.slug }}/s/{{ next_sec.id }}">{{ t('go_next') }}: {{ next_sec.title }} →</a>{% endif %}
+      </div>
+      <div class="readonly markdown">{{ text }}</div>
+    {% else %}
+      <form id="editor-form" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/save" hx-target="#save-status">
+        <textarea id="editor" name="text" data-placeholder="{{ t('editor_placeholder') }}">{{ text }}</textarea>
+        <div class="row">
+          <button class="primary">{{ t('save') }}</button> <span id="save-status" class="muted"></span>
+          <span class="spacer"></span>
+          <small class="muted">{{ t('cite_hint') }}</small>
+        </div>
+      </form>
+    {% endif %}
+
+    <div id="job"></div>
+
+    <h2 id="revisao">{{ t('review') }}</h2>
+    {% if latest %}
+      <p class="muted">{{ t('round') }} {{ latest.round }} · {{ latest.provider }} {{ latest.model }} · {{ latest.created_at[:16].replace('T',' ') }}
+        {% if latest.errors %}<span class="err">· {{ t('review_errors') }}: {{ latest.errors | join(', ') }}</span>{% endif %}</p>
+      {% if not latest.groups %}<div class="notice ok">{{ t('no_findings') }}</div>{% endif %}
+      <div class="groups">
+        {% for g in latest.groups %}{% set number = latest.round %}{% include "partials/group_card.html" %}{% endfor %}
+      </div>
+    {% else %}
+      <p class="muted">{{ t('no_review_yet') }}</p>
+    {% endif %}
+  </section>
+
+  <aside class="tools">
+    <h3>{{ t('next_steps') }}</h3>
+    {% if sec.state != 'approved' %}
+    <form class="tool" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/review" hx-target="#job" hx-include="#editor">
+      <h4>🔎 {{ t('tool_review') }}</h4>
+      <p class="small">{{ t('tool_review_desc') }}</p>
+      <label class="small"><input type="checkbox" name="adversary" value="1"> {{ t('with_adversary') }}</label>
+      <button>{{ t('run_review') }}</button>
+    </form>
+
+    <form class="tool" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/polish" hx-target="#job" hx-include="#editor">
+      <h4>✨ {{ t('tool_polish') }}</h4>
+      <p class="small">{{ t('tool_polish_desc') }}</p>
+      <input name="extra" placeholder="{{ t('polish_extra_ph') }}">
+      <button>{{ t('run_polish') }}</button>
+    </form>
+
+    <form class="tool" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/edit" hx-target="#job" hx-include="#editor" onsubmit="caneta.fillSelection(this)" hx-on::before-request="caneta.fillSelection(this)">
+      <h4>🖊 {{ t('tool_edit') }}</h4>
+      <p class="small">{{ t('tool_edit_desc') }}</p>
+      <textarea name="instruction" rows="2" placeholder="{{ t('edit_ph') }}" required></textarea>
+      <input type="hidden" name="selection">
+      <button>{{ t('run_edit') }}</button>
+    </form>
+
+    {% if enrich %}
+    <form class="tool" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/enrich" hx-target="#job" hx-include="#editor">
+      <h4>📚 {{ t('tool_enrich') }}</h4>
+      <p class="small">{{ t('tool_enrich_desc') }}</p>
+      {% if refs %}
+        <div class="checklist">
+        {% for r in refs %}<label class="small"><input type="checkbox" name="keys" value="{{ r.id }}" {{ 'checked' if r.id not in cited }}> {{ ref_label(r)[:110] }}</label>{% endfor %}
+        </div>
+        <button>{{ t('run_enrich') }}</button>
+      {% endif %}
+      <a class="button ghost" href="/p/{{ proj.slug }}/references">{{ t('find_more_refs') }}</a>
+    </form>
+    {% endif %}
+
+    {% if compare %}
+    <form class="tool" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/compare" hx-target="#job" hx-include="#editor">
+      <h4>⚖️ {{ t('tool_compare') }}</h4>
+      <p class="small">{{ t('tool_compare_desc') }}</p>
+      {% if fulltext_keys %}
+        <div class="checklist">
+        {% for r in refs if r.id in fulltext_keys %}<label class="small"><input type="checkbox" name="keys" value="{{ r.id }}" checked> {{ ref_label(r)[:110] }}</label>{% endfor %}
+        </div>
+        <button>{{ t('run_compare') }}</button>
+      {% else %}
+        <p class="small muted">{{ t('no_fulltext_yet') }}</p>
+      {% endif %}
+      <a class="button ghost" href="/p/{{ proj.slug }}/references">{{ t('get_fulltext') }}</a>
+    </form>
+    {% endif %}
+
+    <div class="tool approve">
+      <h4>✅ {{ t('tool_approve') }}</h4>
+      <p class="small">{{ t('tool_approve_desc') }}</p>
+      <button class="primary" hx-post="/p/{{ proj.slug }}/s/{{ sec.id }}/approve" hx-include="#editor">{{ t('approve') }}</button>
+    </div>
+    {% endif %}
+
+    <h3>{{ t('history') }}</h3>
+    {% if history %}
+    <ul class="history small">
+      {% for h in history %}
+      <li>
+        <a href="#" hx-get="/p/{{ proj.slug }}/s/{{ sec.id }}/history/{{ h.file }}" hx-target="#job">{{ h.stamp[:4] }}-{{ h.stamp[4:6] }}-{{ h.stamp[6:8] }} {{ h.stamp[9:11] }}:{{ h.stamp[11:13] }}</a>
+        <span class="muted">{{ h.reason }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="small muted">{{ t('no_history') }}</p>{% endif %}
+  </aside>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/vendor/easymde.min.js"></script><script>caneta.initEditor();</script>{% endblock %}

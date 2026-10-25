@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ t('journal_title') }}</h1>
+<p>{{ t('journal_intro') }}</p>
+{% if proj.journal %}<div class="notice ok">{{ t('current_journal') }}: <strong>{{ proj.journal.name }}</strong> ({{ proj.journal.qualis or '—' }})</div>{% endif %}
+<div id="job"></div>
+
+<h2>{{ t('top5') }}</h2>
+{% if not ranked %}<p class="muted">{{ t('no_ranking') }}</p>{% endif %}
+<div class="cards">
+{% for j in ranked %}
+  <form class="card" hx-post="/p/{{ proj.slug }}/journal" hx-target="#job">
+    <input type="hidden" name="journal_id" value="{{ j.id }}">
+    <h3>{{ loop.index }}. {{ j.journal }}</h3>
+    <p class="small">
+      <span class="badge">Qualis {{ j.qualis_estrato or '—' }}</span>
+      <span class="badge">{{ t('citations_2y') }} {{ j.citacoes_2anos_openalex or '—' }}</span>
+      <span class="badge">{{ j.country }}</span>
+      <span class="badge">{{ j.template_types }}</span>
+    </p>
+    <p class="small">{{ (j.escopo or '')[:380] }}{% if (j.escopo or '')|length > 380 %}…{% endif %}</p>
+    <p class="small muted">{{ t('matching_terms') }}: {{ j.terms | join(', ') }}</p>
+    <a class="small" href="{{ j.diamond_evidence_url }}" target="_blank" rel="noopener">{{ t('diamond_evidence') }}</a>
+    <button>{{ t('choose_journal') }}</button>
+  </form>
+{% endfor %}
+</div>
+
+<h2>{{ t('choose_other') }}</h2>
+<form class="row" hx-post="/p/{{ proj.slug }}/journal" hx-target="#job">
+  <select name="journal_id">
+    {% for j in all_journals %}<option value="{{ j.id }}">{{ j.journal }} — Qualis {{ j.qualis_estrato }} — {{ j.area.replace('_',' ') }}</option>{% endfor %}
+  </select>
+  <button>{{ t('choose_journal') }}</button>
+</form>
+<p class="small muted">{{ t('journal_note') }}</p>
+{% endblock %}

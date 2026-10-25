@@ -1,0 +1,7 @@
+<div class="job" {% if job.status == 'running' %}hx-get="/jobs/{{ job.id }}" hx-trigger="load delay:1s" hx-swap="outerHTML"{% elif job.status == 'done' and job.next_url %}hx-get="/jobs/{{ job.id }}" hx-trigger="load" hx-swap="outerHTML"{% endif %}>
+  <strong>{{ job.title }}</strong>
+  {% if job.status == 'running' %}<span class="spinner"></span> <span class="muted">{{ job.elapsed }}s</span>{% endif %}
+  {% if job.status == 'error' %}<div class="notice err">{{ job.error }}</div>{% endif %}
+  {% if job.status == 'done' %}<span class="ok">✔</span>{% endif %}
+  {% if job.log %}<pre class="joblog">{{ job.log[-12:] | join('\n') }}</pre>{% endif %}
+</div>

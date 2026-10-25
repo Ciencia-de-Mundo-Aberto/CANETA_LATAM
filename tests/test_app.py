@@ -1,0 +1,107 @@
+"""End-to-end through the web API (FastAPI TestClient) with a fake LLM provider."""
+
+import re
+import time
+
+import pytest
+from fastapi.testclient import TestClient
+
+from caneta import config
+from caneta import project as store
+from caneta.app import create_app
+from caneta.llm import registry
+
+
+@pytest.fixture
+def client():
+    app = create_app(token="tok")
+    c = TestClient(app)
+    c.get("/auth", params={"t": "tok"}, follow_redirects=False)
+    return c
+
+
+def wait_job(client, html: str) -> str:
+    job_id = re.search(r"/jobs/([0-9a-f]+)", html).group(1)
+    for _ in range(100):
+        r = client.get(f"/jobs/{job_id}")
+        if r.headers.get("HX-Redirect"):
+            return r.headers["HX-Redirect"]
+        if "notice err" in r.text:
+            raise AssertionError(r.text)
+        time.sleep(0.05)
+    raise AssertionError("job did not finish")
+
+
+def test_session_guard():
+    c = TestClient(create_app(token="tok"))
+    assert c.get("/").status_code == 401
+    assert c.get("/auth", params={"t": "wrong"}).status_code == 401
+
+
+def test_setup_then_full_section_cycle(client, fake, monkeypatch):
+    cfg = config.load()
+    cfg.setup_done = False
+    config.save(cfg)
+    assert client.get("/", follow_redirects=False).headers["location"] == "/setup"
+    assert "NVIDIA NIM" in client.get("/setup").text
+    r = client.post("/setup/save", data={"lang": "pt_BR", "provider_id": "none"})
+    assert r.headers["HX-Redirect"] == "/" and config.load().setup_done
+
+    provider = fake(default={"parecer": "revisar", "findings": [
+        {"excerpt": "coloniais comuns", "rotulo": "Clareza", "prioridade": "média", "descricao": "Vago.",
+         "edit": {"find": "coloniais comuns", "replace": "coloniais frequentes"}}]})
+    monkeypatch.setattr(registry, "build", lambda *a, **k: provider)
+
+    r = client.post("/projects/new", data={"title": "Meu artigo", "lang": "pt_BR", "structure": "imrad"})
+    slug = r.headers["HX-Redirect"].split("/")[2]
+    proj = store.load(slug)
+    intro = proj.sections[1]
+    page = client.get(f"/p/{slug}/s/{intro.id}")
+    assert page.status_code == 200 and "Citações abertas" in page.text
+
+    assert "salvo" in client.post(f"/p/{slug}/s/{intro.id}/save",
+                                  data={"text": "Hidroides são cnidários coloniais comuns."}).text
+    nxt = wait_job(client, client.post(f"/p/{slug}/s/{intro.id}/review", data={}).text)
+    assert nxt.startswith(f"/p/{slug}/s/{intro.id}")
+    page = client.get(f"/p/{slug}/s/{intro.id}").text
+    gid = re.search(r'id="g-(G1-\d+)"', page).group(1)
+    card = client.post(f"/p/{slug}/s/{intro.id}/decide", data={"number": 1, "group": gid, "action": "accept"}).text
+    assert "aceito" in card
+    assert "coloniais frequentes" in store.load(slug).read_section(intro.id)
+
+    # proposal flow: polish → diff page → accept
+    provider.default = {"texto": "Hidroides são cnidários coloniais frequentes no litoral.", "notas": "ok"}
+    nxt = wait_job(client, client.post(f"/p/{slug}/s/{intro.id}/polish", data={"extra": ""}).text)
+    assert nxt.startswith("/proposals/")
+    assert "<ins>" in client.get(nxt).text
+    client.post(nxt + "/accept")
+    assert "litoral" in store.load(slug).read_section(intro.id)
+
+    r = client.post(f"/p/{slug}/s/{intro.id}/approve", data={})
+    assert r.headers["HX-Redirect"].startswith(f"/p/{slug}/s/")
+    assert store.load(slug).section(intro.id).state == "approved"
+
+    for path in ("references", "journal", "export", "log"):
+        assert client.get(f"/p/{slug}/{path}").status_code == 200
+    md = client.get(f"/p/{slug}/export/md")
+    assert md.status_code == 200 and "litoral" in md.text
+    ck = client.get(f"/p/{slug}/checkpoint")
+    assert ck.status_code == 200 and ck.content[:2] == b"PK"
+    assert "ai_call" in client.get(f"/p/{slug}/log").text
+
+
+def test_search_flow_with_stubbed_mcp(client, monkeypatch):
+    from caneta import discovery
+
+    papers = [{"ref": "10.9/z", "title": "Hydroids of Sergipe", "authors": ["Mendonça, Luana"], "journal": "PAZ",
+               "year": 2022, "doi": "10.9/z", "abstract": "We recorded 30 species.", "diamond": True,
+               "found_in": ["scielo"]}]
+    monkeypatch.setattr(discovery, "search", lambda proj, q, **kw: {"returned": 1, "errors": [], "papers": papers})
+    r = client.post("/projects/new", data={"title": "Busca", "lang": "pt_BR", "structure": "imrad"})
+    slug = r.headers["HX-Redirect"].split("/")[2]
+    nxt = wait_job(client, client.post(f"/p/{slug}/search", data={"query": "hidroides OR hydroids"}).text)
+    page = client.get(nxt).text
+    assert "Hydroids of Sergipe" in page
+    sid = nxt.rsplit("/", 1)[1]
+    client.post(f"/p/{slug}/references/add", data={"search_id": sid, "picks": [0]})
+    assert store.load(slug).references()[0]["id"] == "mendonca2022hydroids"

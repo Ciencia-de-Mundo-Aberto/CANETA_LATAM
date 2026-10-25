@@ -1,0 +1,6 @@
+<div class="card">
+  <h3>{{ t('version') }} {{ file }}</h3>
+  <p class="small muted">{{ t('history_diff_hint') }}</p>
+  <div class="diff-view">{{ diff | safe }}</div>
+  <button class="ghost" hx-post="/p/{{ slug }}/s/{{ sid }}/restore" hx-vals='{"file": "{{ file }}"}' hx-confirm="{{ t('confirm_restore') }}">{{ t('restore') }}</button>
+</div>

@@ -1,0 +1,948 @@
+{
+ "Ciencias_Agrarias/Ciencia_Animal_Brasileira": [
+  {
+   "file": "Modelo_de_Formatacao_CAB.docx",
+   "url": "https://revistas.ufg.br/vet/libraryFiles/downloadPublic/1023"
+  }
+ ],
+ "Ciencias_Agrarias/Pesquisa_Florestal_Brasileira": [
+  {
+   "file": "Template_Artigo_PFB.dotx",
+   "url": "https://pfb.sede.embrapa.br/pfb/libraryFiles/downloadPublic/36"
+  },
+  {
+   "file": "Template_ArtigoRevisao_PFB.dotx",
+   "url": "https://pfb.sede.embrapa.br/pfb/libraryFiles/downloadPublic/34"
+  },
+  {
+   "file": "Template_NotaCientifica_PFB.dotx",
+   "url": "https://pfb.sede.embrapa.br/pfb/libraryFiles/downloadPublic/38"
+  }
+ ],
+ "Ciencias_Agrarias/Agronomia_Mesoamericana": [
+  {
+   "file": "Mandatory_Manuscript_Template.docx",
+   "url": "https://revistas.ucr.ac.cr/index.php/ragromeso/libraryFiles/downloadPublic/5"
+  }
+ ],
+ "Ciencias_Agrarias/Acta_Agronomica": [
+  {
+   "file": "Plantilla_Art_ACAG_2025.docx",
+   "url": "https://revistas.unal.edu.co/index.php/acta_agronomica/libraryFiles/downloadPublic/1483"
+  }
+ ],
+ "Ciencias_Agrarias/Ciencia_y_Tecnologia_Agropecuaria": [
+  {
+   "file": "manuscrito_modelo_8ix2017.docx",
+   "url": "https://revistacta.agrosavia.co/documents/manuscrito_modelo_8ix2017.docx"
+  },
+  {
+   "file": "Manuscrito_Modelo_Rev_Agrosavia_Rev_8ix2017_AE.docx",
+   "url": "https://revistacta.agrosavia.co/documents/Manuscrito_Modelo_Rev_Agrosavia_Rev_8ix2017_AE.docx"
+  }
+ ],
+ "Ciencias_Agrarias/Revista_Chapingo_Serie_Horticultura": [
+  {
+   "file": "Manuscript_Template-RCHSH.docx",
+   "url": "https://revistas.chapingo.mx/horticultura/phpscript/download.php?file=pmanuscrito"
+  }
+ ],
+ "Ciencias_Agrarias/Revista_Chapingo_Serie_Ciencias_Forestales_y_del_Ambiente": [
+  {
+   "file": "Manuscript_Template-RCHSCFA.docx",
+   "url": "https://revistas.chapingo.mx/forestales/phpscript/download.php?file=pmanuscrito"
+  }
+ ],
+ "Ciencias_Agrarias/Forest_Systems": [
+  {
+   "file": "Template_Research_Article_FS.docx",
+   "url": "https://fs.revistas.csic.es/index.php/fs/libraryFiles/downloadPublic/78"
+  },
+  {
+   "file": "Template_Short_Communication_FS.docx",
+   "url": "https://fs.revistas.csic.es/index.php/fs/libraryFiles/downloadPublic/67"
+  },
+  {
+   "file": "Template_Resource_Communication_FS.docx",
+   "url": "https://fs.revistas.csic.es/index.php/fs/libraryFiles/downloadPublic/68"
+  },
+  {
+   "file": "Template_Review_Article_FS.docx",
+   "url": "https://fs.revistas.csic.es/index.php/fs/libraryFiles/downloadPublic/69"
+  }
+ ],
+ "Ciencias_Agrarias/Spanish_Journal_of_Agricultural_Research": [
+  {
+   "file": "Template_Research_Article_SJAR.docx",
+   "url": "https://sjar.revistas.csic.es/index.php/sjar/libraryFiles/downloadPublic/78"
+  },
+  {
+   "file": "Template_Short_Communication_SJAR.docx",
+   "url": "https://sjar.revistas.csic.es/index.php/sjar/libraryFiles/downloadPublic/63"
+  },
+  {
+   "file": "Template_Review_Article_SJAR.docx",
+   "url": "https://sjar.revistas.csic.es/index.php/sjar/libraryFiles/downloadPublic/64"
+  }
+ ],
+ "Ciencias_Agrarias/Acta_Agriculturae_Slovenica": [
+  {
+   "file": "Template_for_manuscript_AAS.dotx",
+   "url": "https://journals.uni-lj.si/aas/libraryFiles/downloadPublic/32"
+  }
+ ],
+ "Ciencias_Agrarias/Journal_of_Central_European_Agriculture": [
+  {
+   "file": "JCEA_article_template.docx",
+   "url": "https://hrcak.srce.hr/upute/obrazac_clanak_en_Journal_of_Central_European_Agriculture.docx"
+  }
+ ],
+ "Ciencias_Agrarias/Journal_of_Agricultural_Sciences_Belgrade": [
+  {
+   "file": "Template_JOAS_2026.docx",
+   "url": "https://www.agrif.bg.ac.rs/uploads/attachment/strana/2788/Template_JOAS_2026.docx"
+  }
+ ],
+ "Ciencias_Biologicas/Revista_de_Biologia_Tropical": [
+  {
+   "file": "Template_RBT_english.docx",
+   "url": "https://revistas.ucr.ac.cr/index.php/rbt/libraryFiles/downloadPublic/587"
+  }
+ ],
+ "Ciencias_Biologicas/Acta_Biologica_Colombiana": [
+  {
+   "file": "Formato_de_Sometimiento_Espanol_2026.docx",
+   "url": "https://revistas.unal.edu.co/index.php/actabiol/libraryFiles/downloadPublic/1755"
+  }
+ ],
+ "Ciencias_Biologicas/Biota_Colombiana": [
+  {
+   "file": "Template_DataPaper_Biota.docx",
+   "url": "https://revistas.humboldt.org.co/index.php/biota/libraryFiles/downloadPublic/8"
+  }
+ ],
+ "Ciencias_Biologicas/Universitas_Scientiarum": [
+  {
+   "file": "Author_template_UnivSci.docx",
+   "url": "https://ciencias.javeriana.edu.co/documents/1578117/0/Author+template.docx/b7dd06d6-7e6c-6bb8-448b-b9d87faa8c3a?t=1713371660862"
+  }
+ ],
+ "Ciencias_Biologicas/Revista_de_Biologia_Neotropical": [
+  {
+   "file": "Modelo_Template_Artigo_RBN.docx",
+   "url": "https://files.cercomp.ufg.br/weby/up/776/o/Modelo_Template_-_Artigo-Articulo-Article_-_RBN.docx"
+  }
+ ],
+ "Ciencias_Biologicas/Ciencia_e_Natura": [
+  {
+   "file": "Template_ENG_APA.docx",
+   "url": "https://periodicos.ufsm.br/cienciaenatura/libraryFiles/downloadPublic/2482"
+  },
+  {
+   "file": "Template_PT_APA.docx",
+   "url": "https://periodicos.ufsm.br/cienciaenatura/libraryFiles/downloadPublic/2480"
+  },
+  {
+   "file": "Template_PT_ABNT.docx",
+   "url": "https://periodicos.ufsm.br/cienciaenatura/libraryFiles/downloadPublic/2481"
+  },
+  {
+   "file": "template_tex_ciencia_e_natura-main.zip",
+   "url": "https://github.com/centraldeperiodicos/template_tex_ciencia_e_natura/archive/refs/heads/main.zip"
+  }
+ ],
+ "Ciencias_Biologicas/Anales_del_Jardin_Botanico_de_Madrid": [
+  {
+   "file": "TEMPLATE_Article_AJBM_2024a.docx",
+   "url": "https://rjb.revistas.csic.es/public/journals/1/TEMPLATE_Article_AJBM_2024a.docx"
+  },
+  {
+   "file": "TEMPLATE_Short-note_AJBM_2024a.docx",
+   "url": "https://rjb.revistas.csic.es/public/journals/1/TEMPLATE_Short-note_AJBM_2024a.docx"
+  }
+ ],
+ "Ciencias_Biologicas/Acta_Biologica_Slovenica": [
+  {
+   "file": "ABS_OR_template_2025.docx",
+   "url": "https://journals.uni-lj.si/abs/libraryFiles/downloadPublic/34"
+  },
+  {
+   "file": "ABS_DB_template_2025.docx",
+   "url": "https://journals.uni-lj.si/abs/libraryFiles/downloadPublic/35"
+  },
+  {
+   "file": "ACTA_FN_template.docx",
+   "url": "https://journals.uni-lj.si/abs/libraryFiles/downloadPublic/44"
+  }
+ ],
+ "Ciencias_da_Saude/Revista_de_Educacao_Fisica_Exercito": [
+  {
+   "file": "Title_Page.doc",
+   "url": "https://www.revistadeeducacaofisica.com/_files/ugd/254f01_0a4cde4ccda5486081c58d91ad9fd2da.doc"
+  },
+  {
+   "file": "Template_Original_Article.doc",
+   "url": "https://www.revistadeeducacaofisica.com/_files/ugd/254f01_e5be6a073c084fd59c27fbefa166fdbc.doc"
+  },
+  {
+   "file": "Template_Review_Article.doc",
+   "url": "https://www.revistadeeducacaofisica.com/_files/ugd/254f01_39239a4270da4794a66410d2f8f41fe4.doc"
+  },
+  {
+   "file": "Template_Case_Study_or_Brief_Report.doc",
+   "url": "https://www.revistadeeducacaofisica.com/_files/ugd/254f01_f4b3c2e8148a47ac83b938f079424b2e.doc"
+  },
+  {
+   "file": "Template_Research_Note_Article.doc",
+   "url": "https://www.revistadeeducacaofisica.com/_files/ugd/254f01_ac9d41d2786c49549e64a392ad244839.doc"
+  }
+ ],
+ "Ciencias_da_Saude/Revista_Brasileira_de_Medicina_de_Familia_e_Comunidade": [
+  {
+   "file": "Template_RBMFC.docx",
+   "url": "https://rbmfc.org.br/rbmfc/libraryFiles/downloadPublic/328"
+  }
+ ],
+ "Ciencias_da_Saude/HU_Revista": [
+  {
+   "file": "Template_manuscrito_2025.docx",
+   "url": "https://periodicos.ufjf.br/index.php/hurevista/libraryFiles/downloadPublic/646"
+  },
+  {
+   "file": "Template_folha_de_rosto_2025.docx",
+   "url": "https://periodicos.ufjf.br/index.php/hurevista/libraryFiles/downloadPublic/645"
+  }
+ ],
+ "Ciencias_da_Saude/Revista_Cientifica_da_Faculdade_de_Medicina_de_Campos": [
+  {
+   "file": "Template_artigo_original.docx",
+   "url": "https://revista.fmc.br/ojs/index.php/RCFMC/libraryFiles/downloadPublic/38"
+  },
+  {
+   "file": "Template_artigo_revisao.docx",
+   "url": "https://revista.fmc.br/ojs/index.php/RCFMC/libraryFiles/downloadPublic/39"
+  },
+  {
+   "file": "Template_relato_caso.doc",
+   "url": "https://revista.fmc.br/ojs/index.php/RCFMC/libraryFiles/downloadPublic/40"
+  }
+ ],
+ "Ciencias_da_Saude/Revista_Brasileira_de_Medicina_do_Trabalho": [
+  {
+   "file": "RBMT_template.doc",
+   "url": "https://www.rbmt.org.br/Content/arquivos/RBMT_template.doc"
+  }
+ ],
+ "Ciencias_da_Saude/Perspectivas_em_Medicina_Legal_e_Pericia_Medica": [
+  {
+   "file": "Article-template.docx",
+   "url": "https://www.perspectivas.med.br/wp-content/uploads/2019/01/Article-template.docx"
+  }
+ ],
+ "Ciencias_da_Saude/Brazilian_Journal_of_Oral_Sciences": [
+  {
+   "file": "BJOS_Template_Title_page_2026.docx",
+   "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/bjos/libraryFiles/downloadPublic/1247"
+  },
+  {
+   "file": "BJOS_Template_Main_text_2026.docx",
+   "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/bjos/libraryFiles/downloadPublic/1248"
+  }
+ ],
+ "Ciencias_da_Saude/Conexoes_Educacao_Fisica_Esporte_e_Saude": [
+  {
+   "file": "Template_Novo_2025.docx",
+   "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/conexoes/libraryFiles/downloadPublic/342"
+  }
+ ],
+ "Ciencias_da_Saude/Journal_of_Research_in_Dentistry": [
+  {
+   "file": "Title_page.docx",
+   "url": "https://portaldeperiodicos.animaeducacao.com.br/index.php/JRD/libraryFiles/downloadPublic/22"
+  },
+  {
+   "file": "Manuscript_template.docx",
+   "url": "https://portaldeperiodicos.animaeducacao.com.br/index.php/JRD/libraryFiles/downloadPublic/23"
+  }
+ ],
+ "Ciencias_da_Saude/Caderno_de_Educacao_Fisica_e_Esporte": [
+  {
+   "file": "Template_Artigo_CEFE_2025.docx",
+   "url": "https://e-revista.unioeste.br/index.php/cadernoedfisica/libraryFiles/downloadPublic/82"
+  }
+ ],
+ "Ciencias_da_Saude/RASBRAN": [
+  {
+   "file": "Rasbran_Modelo_do_artigo.docx",
+   "url": "https://www.rasbran.com.br/rasbran/libraryFiles/downloadPublic/13"
+  }
+ ],
+ "Ciencias_da_Saude/Brazilian_Journal_of_Health_and_Pharmacy": [
+  {
+   "file": "BJHP_Template_de_artigo_2026_PT.docx",
+   "url": "https://crfmg.org.br/bjhp/docs/BJHP_Template_de_artigo_2026_PT.docx"
+  },
+  {
+   "file": "Template_NotasTecnicas_BJHP_26.docx",
+   "url": "https://crfmg.org.br/bjhp/docs/Template_NotasTecnicas_BJHP_26.docx"
+  }
+ ],
+ "Ciencias_da_Saude/Revista_de_Enfermagem_da_UFJF": [
+  {
+   "file": "Template_Documento_Principal.docx",
+   "url": "https://periodicos.ufjf.br/index.php/enfermagem/libraryFiles/downloadPublic/565"
+  },
+  {
+   "file": "Folha_de_rosto.docx",
+   "url": "https://periodicos.ufjf.br/index.php/enfermagem/libraryFiles/downloadPublic/535"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Trends_in_Computational_and_Applied_Mathematics_TEMA": [
+  {
+   "file": "TCAM-v.2026-PER.zip",
+   "url": "https://tcam.sbmac.org.br/tema/libraryFiles/downloadPublic/1"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Semina_Ciencias_Exatas_e_Tecnologicas": [
+  {
+   "file": "template_semina_Word-OTH.docx",
+   "url": "https://ojs.uel.br/revistas/uel/index.php/semexatas/libraryFiles/downloadPublic/1"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Orbital_Electronic_Journal_of_Chemistry": [
+  {
+   "file": "orbital_editor_TemplateOrbital2021.docx",
+   "url": "https://periodicos.ufms.br/index.php/orbital/article/download/15508/10614"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Ecletica_Quimica": [
+  {
+   "file": "APPENDIX_2.3a-Template_Manuscript_-_updated_July_07-2026-OTH.docx",
+   "url": "https://revista.iq.unesp.br/ojs/index.php/ecletica/libraryFiles/downloadPublic/132"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Revista_Brasileira_de_Geomorfologia": [
+  {
+   "file": "rbg-template.docx",
+   "url": "https://github.com/revbrgeomorfologia/template/raw/main/rbg-template.docx"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Brazilian_Journal_of_Geophysics": [
+  {
+   "file": "Template_BrJG_Word.docx",
+   "url": "https://sbgf.org.br/publicacoes/revistas/Template_BrJG_Word.docx"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Journal_of_Internet_Services_and_Applications": [
+  {
+   "file": "Template_JISA_1.0.zip",
+   "url": "http://sol.sbc.org.br/public/downloads/Template_JISA_1.0.zip"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Revista_Integracion_UIS": [
+  {
+   "file": "Integracion_formato.zip",
+   "url": "https://revistas.uis.edu.co/public/journals/6/docs/Integracion_formato.zip"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Electronic_Journal_of_Combinatorics": [
+  {
+   "file": "e-jc.sty",
+   "url": "https://www.combinatorics.org/files/e-jc.sty"
+  },
+  {
+   "file": "ejc-sample.tex",
+   "url": "https://www.combinatorics.org/files/ejc-sample.tex"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Algebraic_Combinatorics": [
+  {
+   "file": "alco_2025.zip",
+   "url": "https://alco.centre-mersenne.org/media/ALCO/uploads/2025/03/18/alco_2025.zip"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Logical_Methods_in_Computer_Science": [
+  {
+   "file": "lmcs.cls",
+   "url": "https://lmcs.episciences.org/public/lmcs.cls"
+  },
+  {
+   "file": "instructions.tex",
+   "url": "https://lmcs.episciences.org/public/instructions.tex"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Journal_of_Machine_Learning_Research": [
+  {
+   "file": "jmlr-style-file-master.zip",
+   "url": "https://github.com/JmlrOrg/jmlr-style-file/archive/refs/heads/master.zip"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Seismica": [
+  {
+   "file": "seismica-docx-2025-OTH.dotx",
+   "url": "https://seismica.library.mcgill.ca/libraryFiles/downloadPublic/10"
+  },
+  {
+   "file": "seismica_latex_templates_github_main.zip",
+   "url": "https://github.com/WeAreSeismica/templates/archive/refs/heads/main.zip"
+  }
+ ],
+ "Ciencias_Exatas_e_da_Terra/Tektonika": [
+  {
+   "file": "Tektonika_Word_template-OTH.docx",
+   "url": "https://tektonika.online/index.php/home/libraryFiles/downloadPublic/2"
+  },
+  {
+   "file": "Tektonika-template-OTH.zip",
+   "url": "https://tektonika.online/index.php/home/libraryFiles/downloadPublic/4"
+  }
+ ],
+ "Ciencias_Humanas/Ethic_at": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.ufsc.br/index.php/ethic/libraryFiles/downloadPublic/952"
+  }
+ ],
+ "Ciencias_Humanas/Cadernos_de_Filosofia_Alema": [
+  {
+   "file": "template.odt",
+   "url": "https://revistas.usp.br/filosofiaalema/libraryFiles/downloadPublic/1775"
+  }
+ ],
+ "Ciencias_Humanas/Prometeica": [
+  {
+   "file": "modelo_por_estilos.dotx",
+   "url": "https://periodicos.unifesp.br/index.php/prometeica/libraryFiles/downloadPublic/79"
+  }
+ ],
+ "Ciencias_Humanas/Revista_Tragica": [
+  {
+   "file": "template.docx",
+   "url": "https://revistas.ufrj.br/index.php/tragica/libraryFiles/downloadPublic/306"
+  }
+ ],
+ "Ciencias_Humanas/Voluntas": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.ufsm.br/voluntas/libraryFiles/downloadPublic/3353"
+  }
+ ],
+ "Ciencias_Humanas/Horizonte_PUC_Minas": [
+  {
+   "file": "modelo_artigo.docx",
+   "url": "https://periodicos.pucminas.br/horizonte/article/download/38456/25131"
+  }
+ ],
+ "Ciencias_Humanas/Revista_Aurora": [
+  {
+   "file": "template_artigo.docx",
+   "url": "https://revistas.marilia.unesp.br/index.php/aurora/libraryFiles/downloadPublic/164"
+  },
+  {
+   "file": "template_dossie.docx",
+   "url": "https://revistas.marilia.unesp.br/index.php/aurora/libraryFiles/downloadPublic/164"
+  },
+  {
+   "file": "template_ensaio.docx",
+   "url": "https://revistas.marilia.unesp.br/index.php/aurora/libraryFiles/downloadPublic/164"
+  },
+  {
+   "file": "template_entrevista.docx",
+   "url": "https://revistas.marilia.unesp.br/index.php/aurora/libraryFiles/downloadPublic/164"
+  },
+  {
+   "file": "template_resenha.docx",
+   "url": "https://revistas.marilia.unesp.br/index.php/aurora/libraryFiles/downloadPublic/164"
+  }
+ ],
+ "Ciencias_Humanas/Geopauta": [
+  {
+   "file": "template.docx",
+   "url": "http://periodicos2.uesb.br/geo/libraryFiles/downloadPublic/248"
+  }
+ ],
+ "Ciencias_Humanas/ETD_Educacao_Tematica_Digital": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/etd/libraryFiles/downloadPublic/1137"
+  }
+ ],
+ "Ciencias_Humanas/Olhar_de_Professor": [
+  {
+   "file": "template_artigo_relato.docx",
+   "url": "https://revistas.uepg.br/index.php/olhardeprofessor/libraryFiles/downloadPublic/265"
+  },
+  {
+   "file": "template_entrevista.docx",
+   "url": "https://revistas.uepg.br/index.php/olhardeprofessor/libraryFiles/downloadPublic/265"
+  },
+  {
+   "file": "template_resenha.docx",
+   "url": "https://revistas.uepg.br/index.php/olhardeprofessor/libraryFiles/downloadPublic/265"
+  }
+ ],
+ "Ciencias_Humanas/Formacao_Docente": [
+  {
+   "file": "template_portugues.docx",
+   "url": "https://www.revformacaodocente.com.br/docTemplates/2019_Template_Portugues.docx"
+  }
+ ],
+ "Ciencias_Humanas/Revista_Educacao_UFSM": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.ufsm.br/reveducacao/libraryFiles/downloadPublic/663"
+  }
+ ],
+ "Ciencias_Humanas/Perspectiva_UFSC": [
+  {
+   "file": "template_submissao_inicial.docx",
+   "url": "https://periodicos.ufsc.br/index.php/perspectiva/libraryFiles/downloadPublic/885"
+  }
+ ],
+ "Ciencias_Humanas/Esbocos": [
+  {
+   "file": "modelo_artigo.doc",
+   "url": "https://periodicos.ufsc.br/index.php/esbocos/libraryFiles/downloadPublic/920"
+  },
+  {
+   "file": "modelo_entrevista.docx",
+   "url": "https://periodicos.ufsc.br/index.php/esbocos/libraryFiles/downloadPublic/920"
+  },
+  {
+   "file": "modelo_resenha.docx",
+   "url": "https://periodicos.ufsc.br/index.php/esbocos/libraryFiles/downloadPublic/920"
+  }
+ ],
+ "Ciencias_Humanas/Obutchenie": [
+  {
+   "file": "template_english.docx",
+   "url": "https://seer.ufu.br/index.php/Obutchenie/libraryFiles/downloadPublic/982"
+  },
+  {
+   "file": "template_portugues.docx",
+   "url": "https://seer.ufu.br/index.php/Obutchenie/libraryFiles/downloadPublic/982"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Encontros_Bibli": [
+  {
+   "file": "Template-Encontros_Bibli_Artigo-autor-PT.docx",
+   "url": "https://periodicos.ufsc.br/index.php/eb/libraryFiles/downloadPublic/575"
+  },
+  {
+   "file": "Ensaio_template_Encontros_Bibli-PT.docx",
+   "url": "https://periodicos.ufsc.br/index.php/eb/libraryFiles/downloadPublic/578"
+  },
+  {
+   "file": "Estudo_de_caso_template_Encontros_Bibli-PT.docx",
+   "url": "https://periodicos.ufsc.br/index.php/eb/libraryFiles/downloadPublic/579"
+  },
+  {
+   "file": "Template_Artigo_de_Dados_-_2.docx",
+   "url": "https://periodicos.ufsc.br/index.php/eb/libraryFiles/downloadPublic/581"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Em_Questao": [
+  {
+   "file": "TemplateEmQuestao_PT-BR_2027.doc",
+   "url": "https://seer.ufrgs.br/index.php/EmQuestao/libraryFiles/downloadPublic/400"
+  },
+  {
+   "file": "TemplateEmQuestao_ENG_2027.docx",
+   "url": "https://seer.ufrgs.br/index.php/EmQuestao/libraryFiles/downloadPublic/401"
+  },
+  {
+   "file": "TemplateEmQuestao_SPANOL_2027.docx",
+   "url": "https://seer.ufrgs.br/index.php/EmQuestao/libraryFiles/downloadPublic/402"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/BRAJIS_Brazilian_Journal_of_Information_Science": [
+  {
+   "file": "BRAJIS_Template_versao_portugues.docx",
+   "url": "https://revistas.marilia.unesp.br/index.php/bjis/libraryFiles/downloadPublic/60"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/RDBCI_Revista_Digital_de_Biblioteconomia_e_Ciencia_da_Informacao": [
+  {
+   "file": "Template_Atualizado.docx",
+   "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/rdbci/libraryFiles/downloadPublic/1199"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Transinformacao": [
+  {
+   "file": "TINF_Modelo_de_artigo_PT_2024.docx",
+   "url": "https://periodicos.puc-campinas.edu.br/transinfo/libraryFiles/downloadPublic/35"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Perspectivas_em_Ciencia_da_Informacao": [
+  {
+   "file": "Modelo_de_manuscrito_2026.docx",
+   "url": "https://periodicos.ufmg.br/index.php/pci/libraryFiles/downloadPublic/749"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Ciencia_da_Informacao_IBICT": [
+  {
+   "file": "Modelo-Artigo-Cientifico_Ci.Inf_2025.docx",
+   "url": "https://revista.ibict.br/public/journals/1/modelos/Modelo-Artigo-Cientifico_Ci.Inf_2025.docx"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Revista_Espanola_de_Documentacion_Cientifica": [
+  {
+   "file": "Plantilla_para_autores_de_la_REDC_2025b.docx",
+   "url": "https://redc.revistas.csic.es/public/journals/3/Plantilla_para_autores_de_la_REDC_2025b.docx"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/REAd_Revista_Eletronica_de_Administracao": [
+  {
+   "file": "REAd_Template_Submissao_JUNHO2026.docx",
+   "url": "https://seer.ufrgs.br/index.php/read/libraryFiles/downloadPublic/852"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Revista_Ambiente_Contabil": [
+  {
+   "file": "submissao_template_de_artigo_para_a_Revista_Ambiente_Contabil_v2.docx",
+   "url": "https://periodicos.ufrn.br/ambiente/libraryFiles/downloadPublic/98"
+  },
+  {
+   "file": "submissao_autores_template_de_artigo_para_a_Revista_Ambiente_Contabil_v2.docx",
+   "url": "https://periodicos.ufrn.br/ambiente/libraryFiles/downloadPublic/99"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Pensar_Revista_de_Ciencias_Juridicas": [
+  {
+   "file": "Template_Pensar_PT-EN_v3.docx",
+   "url": "https://ojs.unifor.br/rpen/libraryFiles/downloadPublic/129"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/E-Compos": [
+  {
+   "file": "E-Compos_Template_Submissao_Autores.docx",
+   "url": "https://www.e-compos.org.br/e-compos/libraryFiles/downloadPublic/18"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Oculum_Ensaios": [
+  {
+   "file": "Template_Oculum_PT_2026.docx",
+   "url": "https://periodicos.puc-campinas.edu.br/oculum/libraryFiles/downloadPublic/1"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/urbe_Revista_Brasileira_de_Gestao_Urbana": [
+  {
+   "file": "Template_PT_Artigo_Urbe_Autores.odt",
+   "url": "https://drive.google.com/open?id=11YcxwaZ871HTQ6AZ-pT3-bIv4twT1GT2"
+  }
+ ],
+ "Ciencias_Sociais_Aplicadas/Turismo_Visao_e_Acao": [
+  {
+   "file": "TVA_Template_de_submissao.docx",
+   "url": "https://docs.google.com/document/d/14-xkPmW73nZM4VyfBMkRdiLstb1AM8LW"
+  }
+ ],
+ "Engenharias/Ingenieria_e_Investigacion": [
+  {
+   "file": "Template_IeI-OTH.docx",
+   "url": "https://revistas.unal.edu.co/index.php/ingeinv/libraryFiles/downloadPublic/841"
+  },
+  {
+   "file": "LatexTemplate-OTH.zip",
+   "url": "https://revistas.unal.edu.co/index.php/ingeinv/libraryFiles/downloadPublic/842"
+  }
+ ],
+ "Engenharias/DYNA": [
+  {
+   "file": "Articulo_de_ejemplo-FINAL_2026-Dyna-OTH-OTH.docx",
+   "url": "https://revistas.unal.edu.co/index.php/dyna/libraryFiles/downloadPublic/451"
+  }
+ ],
+ "Engenharias/Revista_Facultad_de_Ingenieria_UdeA": [
+  {
+   "file": "word_template_Ing.docx",
+   "url": "https://revistas.udea.edu.co/public/site/images/sandra-123/word_template_Ing.docx?download=1"
+  },
+  {
+   "file": "latex_template.zip",
+   "url": "https://revistas.udea.edu.co/public/site/images/sandra-123/latex_template.zip?download=1"
+  }
+ ],
+ "Engenharias/Intl_Journal_of_Production_Management_and_Engineering": [
+  {
+   "file": "IJPME_template-OTH.docx",
+   "url": "https://polipapers.upv.es/index.php/IJPME/libraryFiles/downloadPublic/387"
+  }
+ ],
+ "Engenharias/Revista_Producao_Online": [
+  {
+   "file": "modeloDeArtigoProducaoonline_com_autores-REP-REP.doc",
+   "url": "https://www.producaoonline.org.br/rpo/libraryFiles/downloadPublic/15"
+  }
+ ],
+ "Engenharias/GEPROS": [
+  {
+   "file": "TEMPLATE_-_GEPROS_-_INGLES-OTH.docx",
+   "url": "https://revista.feb.unesp.br/gepros/libraryFiles/downloadPublic/7"
+  },
+  {
+   "file": "TEMPLATE_-_GEPROS_-_PORTUGUES-OTH.docx",
+   "url": "https://revista.feb.unesp.br/gepros/libraryFiles/downloadPublic/6"
+  }
+ ],
+ "Engenharias/Production_ABEPRO": [
+  {
+   "file": "production_template_1.0.docx",
+   "url": "https://s3.amazonaws.com/host-client-assets/files/production/production_template_1.0.docx"
+  }
+ ],
+ "Engenharias/Revista_Brasileira_de_Engenharia_de_Biossistemas": [
+  {
+   "file": "Template_BIOENG.docx",
+   "url": "https://seer.tupa.unesp.br/files/Template_BIOENG.docx"
+  }
+ ],
+ "Engenharias/Vetor_FURG": [
+  {
+   "file": "Template_VETOR_LaTeX-OTH.zip",
+   "url": "https://periodicos.furg.br/vetor/libraryFiles/downloadPublic/19"
+  },
+  {
+   "file": "template_Vetor_pt_BR-OTH.docx",
+   "url": "https://periodicos.furg.br/vetor/libraryFiles/downloadPublic/20"
+  }
+ ],
+ "Engenharias/ES_Engineering_and_Science": [
+  {
+   "file": "Modelo_de_formatacao_Engineering_and_Science-MAR.docx",
+   "url": "https://periodicoscientificos.ufmt.br/ojs/index.php/eng/libraryFiles/downloadPublic/317"
+  }
+ ],
+ "Engenharias/IBRACON_Structures_and_Materials_Journal": [
+  {
+   "file": "ISMJ_Template.docx",
+   "url": "https://www.ibracon.org.br/publicacoes/revistas_ibracon/ISMJ_Template.docx"
+  }
+ ],
+ "Engenharias/Journal_of_Coastal_and_Hydraulic_Structures": [
+  {
+   "file": "JCHS-template.dotx",
+   "url": "https://filelist.tudelft.nl/Library/files/journals/JCHS-template.dotx"
+  }
+ ],
+ "Engenharias/Revista_ALCONPAT": [
+  {
+   "file": "GuiaDeAutoresConFormatoRA-English-OTH.docx",
+   "url": "https://revistaalconpat.org/index.php/RA/libraryFiles/downloadPublic/16"
+  }
+ ],
+ "Engenharias/Brazilian_Journal_of_Radiation_Sciences": [
+  {
+   "file": "20261019-Template-BJR-OTH-OTH.docx",
+   "url": "https://bjrs.org.br/revista/index.php/REVISTA/libraryFiles/downloadPublic/6"
+  }
+ ],
+ "Engenharias/RIELAC_Ingenieria_Electronica_Automatica_y_Comunicaciones": [
+  {
+   "file": "FormatoEntrega.doc",
+   "url": "https://rielac.cujae.edu.cu/public/FormatoEntrega.doc"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Classica": [
+  {
+   "file": "template.docx",
+   "url": "https://revista.classica.org.br/classica/libraryFiles/downloadPublic/14"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Revista_da_Abralin": [
+  {
+   "file": "template-abralin-en.docx",
+   "url": "https://www.abralin.org/docs/templates/template-abralin-pt.docx"
+  },
+  {
+   "file": "template-abralin-pt.docx",
+   "url": "https://www.abralin.org/docs/templates/template-abralin-pt.docx"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Texto_Livre": [
+  {
+   "file": "template_2025.odt",
+   "url": "https://periodicos.ufmg.br/index.php/textolivre/libraryFiles/downloadPublic/719"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Boitata": [
+  {
+   "file": "template.docx",
+   "url": "https://ojs.uel.br/revistas/uel/index.php/boitata/libraryFiles/downloadPublic/420"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Fragmentum": [
+  {
+   "file": "template_artigo.docx",
+   "url": "https://periodicos.ufsm.br/fragmentum/libraryFiles/downloadPublic/2629"
+  },
+  {
+   "file": "template_resenha.docx",
+   "url": "https://periodicos.ufsm.br/fragmentum/libraryFiles/downloadPublic/2629"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Per_Musi": [
+  {
+   "file": "template_artigo.docx",
+   "url": "https://periodicos.ufmg.br/index.php/permusi/libraryFiles/downloadPublic/1211"
+  },
+  {
+   "file": "template_entrevista.docx",
+   "url": "https://periodicos.ufmg.br/index.php/permusi/libraryFiles/downloadPublic/1211"
+  },
+  {
+   "file": "template_partitura.docx",
+   "url": "https://periodicos.ufmg.br/index.php/permusi/libraryFiles/downloadPublic/1211"
+  },
+  {
+   "file": "template_resenha.docx",
+   "url": "https://periodicos.ufmg.br/index.php/permusi/libraryFiles/downloadPublic/1211"
+  },
+  {
+   "file": "template_traducao.docx",
+   "url": "https://periodicos.ufmg.br/index.php/permusi/libraryFiles/downloadPublic/1211"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Musica_Hodie": [
+  {
+   "file": "Template_Musica_Hodie_EN.docx",
+   "url": "https://revistas.ufg.br/musica/libraryFiles/downloadPublic/1163"
+  },
+  {
+   "file": "Template_Musica_Hodie_ES.docx",
+   "url": "https://revistas.ufg.br/musica/libraryFiles/downloadPublic/1163"
+  },
+  {
+   "file": "Template_Musica_Hodie_PTBR.docx",
+   "url": "https://revistas.ufg.br/musica/libraryFiles/downloadPublic/1163"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Revista_Vortex": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.unespar.edu.br/index.php/vortex/libraryFiles/downloadPublic/125"
+  },
+  {
+   "file": "template_odt.odt",
+   "url": "https://periodicos.unespar.edu.br/index.php/vortex/libraryFiles/downloadPublic/125"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Moin_Moin": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.udesc.br/index.php/moin/libraryFiles/downloadPublic/212"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Rebeca": [
+  {
+   "file": "guia_estilo_artigos.docx",
+   "url": "https://rebeca.socine.org.br/1/libraryFiles/downloadPublic/28"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Revista_Apotheke": [
+  {
+   "file": "template.docx",
+   "url": "https://www.revistas.udesc.br/index.php/apotheke/libraryFiles/downloadPublic/123"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Revista_Digital_LAV": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.ufsm.br/revislav/libraryFiles/downloadPublic/110"
+  }
+ ],
+ "Linguistica_Letras_e_Artes/Resgate": [
+  {
+   "file": "template.docx",
+   "url": "https://periodicos.sbu.unicamp.br/ojs/index.php/resgate/libraryFiles/downloadPublic/244"
+  }
+ ],
+ "Multidisciplinar/Ensaio_Pesquisa_em_Educacao_em_Ciencias": [
+  {
+   "file": "Template_ARTIGO_EPEC_english.dotx",
+   "url": "https://drive.google.com/file/d/1RTqPhrGttf2kBqyCjMeVLiKGkDzURx7E"
+  }
+ ],
+ "Multidisciplinar/RBPEC_Revista_Brasileira_de_Pesquisa_em_Educacao_em_Ciencias": [
+  {
+   "file": "RBPEC_template.docx",
+   "url": "https://docs.google.com/document/d/1cED8Kim4xtI9asA0C_caOXDJOfc4BTAbuaXPso-FkJ0"
+  }
+ ],
+ "Multidisciplinar/IENCI_Investigacoes_em_Ensino_de_Ciencias": [
+  {
+   "file": "Template_IENCI_2025_-_Artigo_Empirico.docx",
+   "url": "https://drive.google.com/u/0/uc?id=1KRRzpnXC94iy3a3Hth7vKYLh3crPMQ4L&export=download"
+  },
+  {
+   "file": "Template_IENCI_2025_-_Revisao_da_Literatura.docx",
+   "url": "https://drive.google.com/u/0/uc?id=1kPtYt2VmIw6rfcMJcyXLbpABzGvSizp7&export=download"
+  },
+  {
+   "file": "Template_IENCI_2025_-_Artigo_Teorico.docx",
+   "url": "https://drive.google.com/u/0/uc?id=1AlGuPoDaXwEbno8rD92G2qvTjKmHmMl5&export=download"
+  },
+  {
+   "file": "Template_IENCI_2025_-_Contribuicao_Critica.docx",
+   "url": "https://drive.google.com/u/0/uc?id=1CM9dXPe77p1aPqDsat0sj7SanXRPD5MB&export=download"
+  }
+ ],
+ "Multidisciplinar/Alexandria_Revista_de_Educacao_em_Ciencia_e_Tecnologia": [
+  {
+   "file": "Template_Final_Alexandria_2024_com_acessibilidade_-_final_14.11.2024.docx",
+   "url": "https://periodicos.ufsc.br/index.php/alexandria/libraryFiles/downloadPublic/728"
+  }
+ ],
+ "Multidisciplinar/RBECT_Revista_Brasileira_de_Ensino_de_Ciencia_e_Tecnologia": [
+  {
+   "file": "Modelo_artigo_RBECT.docx",
+   "url": "https://cloud.utfpr.edu.br/index.php/s/03BdYrDC3L12VY8"
+  }
+ ],
+ "Multidisciplinar/Revista_Eureka_sobre_Ensenanza_y_Divulgacion_de_las_Ciencias": [
+  {
+   "file": "propuesta_plantilla_eureka.docx",
+   "url": "https://revistas.uca.es/index.php/eureka/libraryFiles/downloadPublic/288"
+  },
+  {
+   "file": "propuesta_plantilla_eureka.odt",
+   "url": "https://revistas.uca.es/index.php/eureka/libraryFiles/downloadPublic/289"
+  }
+ ],
+ "Multidisciplinar/Novos_Cadernos_NAEA": [
+  {
+   "file": "Template_NCN_Artigos.docx",
+   "url": "https://drive.google.com/uc?export=download&id=1cGjJJcyHkP_6dowhj_5xhydzlDY2gewP"
+  }
+ ],
+ "Multidisciplinar/Redes_Revista_do_Desenvolvimento_Regional": [
+  {
+   "file": "Redes_UNISC_Template.docx",
+   "url": "https://docs.google.com/document/d/1FMsqs9iTXmIoM1isTwcx_bjqVrsF49Bz"
+  }
+ ],
+ "Multidisciplinar/Ambiente_e_Educacao": [
+  {
+   "file": "Template_2024_1.docx",
+   "url": "https://periodicos.furg.br/ambeduc/libraryFiles/downloadPublic/176"
+  }
+ ],
+ "Multidisciplinar/Brazilian_Archives_of_Biology_and_Technology": [
+  {
+   "file": "BABT_template_2026.docx",
+   "url": "https://www.scielo.br/media/files/BABT_template_2026.docx"
+  }
+ ],
+ "Multidisciplinar/Biotecnologia_en_el_Sector_Agropecuario_y_Agroindustrial": [
+  {
+   "file": "Formato_manuscrito_muestra_1.docx",
+   "url": "https://revistas.unicauca.edu.co/index.php/biotecnologia/libraryFiles/downloadPublic/52"
+  }
+ ],
+ "Multidisciplinar/Materiales_de_Construccion": [
+  {
+   "file": "Template_Mater_Construcc_2024a.docx",
+   "url": "https://materconstrucc.revistas.csic.es/public/journals/1/Template_Mater_Construcc_2024a.docx"
+  }
+ ]
+}

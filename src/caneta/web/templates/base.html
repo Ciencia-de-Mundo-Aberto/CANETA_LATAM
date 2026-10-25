@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="{{ cfg.lang.replace('_','-') }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CANETA{% endblock %}</title>
+  <link rel="icon" href="/static/caneta.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/vendor/easymde.min.css">
+  <link rel="stylesheet" href="/static/caneta.css?v={{ asset_v }}">
+  <script src="/static/vendor/htmx.min.js"></script>
+  <script defer src="/static/vendor/alpine.min.js"></script>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/"><img src="/static/caneta.svg" alt="" width="28" height="28"> CANETA</a>
+    <span class="tagline">{{ t('tagline') }}</span>
+    <nav>
+      {% if proj is defined and proj %}
+        <a href="/p/{{ proj.slug }}">{{ t('nav_sections') }}</a>
+        <a href="/p/{{ proj.slug }}/references">{{ t('nav_references') }}</a>
+        <a href="/p/{{ proj.slug }}/journal">{{ t('nav_journal') }}</a>
+        <a href="/p/{{ proj.slug }}/export">{{ t('nav_export') }}</a>
+        <a href="/p/{{ proj.slug }}/log">{{ t('nav_log') }}</a>
+      {% endif %}
+      <a href="/sobre">{{ t('nav_about') }}</a>
+      <a href="/setup" title="{{ t('nav_settings') }}">⚙ {{ PROVIDERS.get(cfg.provider, {}).get('label', cfg.provider) }}</a>
+    </nav>
+  </header>
+  <main>{% block body %}{% endblock %}</main>
+  <footer>CANETA {{ version }} · AGPL-3.0 · <a href="/sobre#manifesto">{{ t('manifesto') }}</a> · {{ t('footer_sources') }}</footer>
+  <script src="/static/caneta.js?v={{ asset_v }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

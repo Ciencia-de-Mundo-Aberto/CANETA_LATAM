@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="hero">
+  <h1>{{ t('home_title') }}</h1>
+  <p>{{ t('home_intro') }} <a href="/sobre">{{ t('about_link') }}</a></p>
+</section>
+
+<div class="cards three">
+  <form class="card" hx-post="/projects/import" hx-encoding="multipart/form-data" hx-indicator="#busy-import">
+    <h2>📄 {{ t('mode_a_title') }}</h2>
+    <p>{{ t('mode_a_desc') }}</p>
+    <input type="file" name="file" accept=".docx,.odt,.tex,.zip,.md,.txt" required>
+    <label>{{ t('manuscript_lang') }}
+      <select name="lang">{% for l, n in [('pt_BR','Português'),('es','Español'),('en','English')] %}<option value="{{ l }}" {{ 'selected' if l == cfg.lang }}>{{ n }}</option>{% endfor %}</select>
+    </label>
+    <button>{{ t('import_article') }}</button>
+    <span id="busy-import" class="htmx-indicator">{{ t('working') }}</span>
+  </form>
+
+  <form class="card" hx-post="/projects/new">
+    <h2>✍️ {{ t('mode_b_title') }}</h2>
+    <p>{{ t('mode_b_desc') }}</p>
+    <input name="title" placeholder="{{ t('working_title') }}" required>
+    <label>{{ t('manuscript_lang') }}
+      <select name="lang">{% for l, n in [('pt_BR','Português'),('es','Español'),('en','English')] %}<option value="{{ l }}" {{ 'selected' if l == cfg.lang }}>{{ n }}</option>{% endfor %}</select>
+    </label>
+    <label>{{ t('structure') }}
+      <select name="structure"><option value="imrad">{{ t('structure_imrad') }}</option><option value="empty">{{ t('structure_empty') }}</option></select>
+    </label>
+    <button>{{ t('start') }}</button>
+  </form>
+
+  <form class="card" hx-post="/projects/checkpoint" hx-encoding="multipart/form-data">
+    <h2>💾 {{ t('open_checkpoint') }}</h2>
+    <p>{{ t('open_checkpoint_desc') }}</p>
+    <input type="file" name="file" accept=".caneta,.zip" required>
+    <button>{{ t('open') }}</button>
+  </form>
+</div>
+
+{% if projects %}
+<h2>{{ t('my_manuscripts') }}</h2>
+<table class="list">
+  <tr><th>{{ t('title') }}</th><th>{{ t('progress') }}</th><th>{{ t('journal') }}</th><th>{{ t('updated') }}</th></tr>
+  {% for p in projects %}
+  {% set done = p.sections | selectattr('state', 'equalto', 'approved') | list | length %}
+  <tr>
+    <td><a href="/p/{{ p.slug }}">{{ p.title }}</a> <small class="muted">{{ t('mode_' ~ p.mode) }}</small></td>
+    <td><progress max="{{ p.sections|length or 1 }}" value="{{ done }}"></progress> {{ done }}/{{ p.sections|length }}</td>
+    <td>{{ (p.journal or {}).get('name', '—') }}</td>
+    <td class="muted">{{ p.data.get('updated_at','')[:16].replace('T',' ') }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

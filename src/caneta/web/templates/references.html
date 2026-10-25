@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>{{ t('refs_title') }}</h1>
+<p>{{ t('refs_intro') }}</p>
+
+<div class="cols two">
+  <form class="card" hx-post="/p/{{ proj.slug }}/search" hx-target="#job">
+    <h2>🔎 {{ t('search_title') }}</h2>
+    <p class="small">{{ t('search_desc') }}</p>
+    <input name="query" value="{{ q or suggested }}" required>
+    <small class="muted">{{ t('search_tip') }}</small>
+    <div class="row small">
+      <label><input type="checkbox" name="sources" value="scielo" checked> SciELO</label>
+      <label><input type="checkbox" name="sources" value="doaj" checked> DOAJ</label>
+      <label>{{ t('from_year') }} <input name="year_from" size="5" placeholder="2015"></label>
+    </div>
+    <button class="primary">{{ t('search') }}</button>
+  </form>
+
+  <form class="card" hx-post="/p/{{ proj.slug }}/material" hx-encoding="multipart/form-data" hx-indicator="#busy-mat">
+    <h2>📦 {{ t('material_title') }}</h2>
+    <p class="small">{{ t('material_desc') }}</p>
+    <input type="file" name="files" multiple required>
+    <button>{{ t('upload') }}</button> <span id="busy-mat" class="htmx-indicator">{{ t('working') }}</span>
+    {% if material %}<ul class="small muted">{% for m in material[-12:] %}<li>{{ m.path }}{% if m.converted %} → md{% if m.method == 'pdf-ocr' %} (OCR){% endif %}{% endif %}{% if m.scanned %} <span class="warn">· {{ t('scanned_pdf') }}</span>{% endif %}{% if m.error %} <span class="err">{{ m.error }}</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
+  </form>
+</div>
+
+<div id="job"></div>
+
+<h2>{{ t('project_refs') }} ({{ refs|length }})</h2>
+{% if refs %}
+<form hx-post="/p/{{ proj.slug }}/references/fulltext" hx-target="#job">
+<table class="list">
+  <tr><th></th><th>{{ t('reference') }}</th><th>{{ t('key') }}</th><th>{{ t('origin') }}</th><th>{{ t('full_text') }}</th><th></th></tr>
+  {% for r in refs %}{% set m = r.caneta or {} %}
+  <tr>
+    <td><input type="checkbox" name="keys" value="{{ r.id }}"></td>
+    <td>{{ ref_label(r) }}{% if r.DOI %} <a class="small" href="https://doi.org/{{ r.DOI }}" target="_blank" rel="noopener">doi</a>{% endif %}</td>
+    <td><code>[@{{ r.id }}]</code></td>
+    <td class="small">{{ m.source or '—' }}{% if m.diamond %} · 💎 Diamond{% endif %}{% if m.source == 'upload' and not m.verified %} · <span class="warn">{{ t('unverified') }}</span>{% endif %}</td>
+    <td class="small">{% if m.fulltext == 'pdf-not-converted' %}<span class="badge warn" title="{{ t('scanned_hint') }}">📄 {{ t('scanned_pdf') }}</span>{% elif m.fulltext == 'pdf-ocr' %}{{ m.fulltext }} <span class="muted">({{ t('ocr_may_err') }})</span>{% else %}{{ m.fulltext or '—' }}{% endif %}</td>
+    <td><button type="button" class="ghost small danger" hx-post="/p/{{ proj.slug }}/references/delete" hx-vals='{"key": "{{ r.id }}"}' hx-confirm="{{ t('confirm_remove_ref') }}">✕</button></td>
+  </tr>
+  {% endfor %}
+</table>
+<button>{{ t('fetch_fulltext') }}</button> <small class="muted">{{ t('fetch_fulltext_desc') }}</small>
+<div class="row small">
+  {% if ocr_available %}
+    <label><input type="checkbox" name="ocr" value="1"> {{ t('use_ocr') }}</label>
+  {% else %}
+    <span class="muted">{{ t('ocr_not_installed') }} <a href="/setup#recursos">{{ t('nav_settings') }}</a></span>
+  {% endif %}
+</div>
+</form>
+{% else %}<p class="muted">{{ t('no_refs') }}</p>{% endif %}
+{% endblock %}

@@ -1,0 +1,1 @@
+Editor: clareza, coesão, estrutura e adequação ao tipo de seção. Procure frases ambíguas ou longas demais, repetições, jargão não definido, parágrafos sem fio condutor, termos inconsistentes e problemas de gramática que afetem o sentido. Não opine sobre o mérito científico.

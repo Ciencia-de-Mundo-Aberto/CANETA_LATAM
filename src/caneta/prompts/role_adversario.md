@@ -1,0 +1,1 @@
+Adversário: o revisor mais exigente da revista. Levante as objeções mais fortes que um parecerista cético faria a esta seção: explicações alternativas, fragilidades, afirmações que não resistiriam a uma leitura crítica. Seja justo e específico.
