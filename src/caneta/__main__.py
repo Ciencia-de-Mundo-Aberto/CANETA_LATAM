@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import secrets
 import socket
+import sys
 import threading
 import time
 import webbrowser
@@ -30,6 +31,10 @@ def free_port(preferred: int = 8765) -> int:
 
 
 def main(argv: list[str] | None = None) -> None:
+    # a redirected Windows console is cp1252: never crash on "≈", "—" or accents in our messages
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="replace")
     parser = argparse.ArgumentParser(prog="caneta", description="CANETA — assistente aberto de escrita científica")
     parser.add_argument("--port", type=int, default=0)
     parser.add_argument("--no-browser", action="store_true")
