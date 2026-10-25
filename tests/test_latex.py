@@ -167,3 +167,12 @@ def test_import_route_accepts_latex_zip_and_exports(tmp_path):
     assert r.status_code == 200 and r.content[:2] == b"PK"
     bad = c.post("/projects/import", files={"file": ("x.zip", b"not a zip", "application/zip")}, data={"lang": "pt_BR"})
     assert bad.status_code == 400
+
+
+def test_numbered_section_refs_come_back_as_ref():
+    from caneta.manuscript_import import PANDOC_REF
+
+    md = ('Seções [2](#sec:contexto){reference-type="ref" reference="sec:contexto"} e '
+          '[\\[eq:s\\]](#eq:s){reference-type="ref" reference="eq:s"}.')
+    out = PANDOC_REF.sub(lambda m: f"\\{m.group(1)}{{{m.group(2)}}}", md)
+    assert out == "Seções \\ref{sec:contexto} e \\ref{eq:s}."

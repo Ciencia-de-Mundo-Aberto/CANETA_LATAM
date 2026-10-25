@@ -27,8 +27,9 @@ HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
 FORMATS = {".md": "markdown", ".markdown": "markdown", ".txt": "markdown", ".docx": "docx", ".odt": "odt",
            ".tex": "latex", ".rtf": "rtf"}
 MD_OUT = "markdown-raw_html-native_divs-native_spans-fenced_divs-bracketed_spans"
-# pandoc renders \ref{x} as [\[x\]](#x){reference-type="ref" reference="x"}: give the LaTeX back
-PANDOC_REF = re.compile(r'\[\\\[[^\]]*\\\]\]\(#[^)]*\)\{reference-type="(\w+)" reference="([^"]+)"\}')
+# pandoc renders \ref{x} as [\[x\]](#x){reference-type="ref" reference="x"}, or [2](#x){...} when it can
+# number the target (e.g. a section): give the LaTeX back
+PANDOC_REF = re.compile(r'\[(?:\\\[[^\]]*\\\]|[^\]]*)\]\(#[^)]*\)\{reference-type="(\w+)" reference="([^"]+)"\}')
 MAIN_NAMES = ("main", "manuscript", "paper", "article", "artigo", "manuscrito", "ms")
 
 

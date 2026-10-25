@@ -124,3 +124,16 @@ def test_discovery_add_papers_builds_csl_from_mcp_data(monkeypatch):
     ref = proj.references()[0]
     assert ref["author"][0] == {"family": "Marques", "given": "Antonio Carlos"}
     assert ref["issued"] == {"date-parts": [[2021]]}
+
+
+def test_journal_matching_ignores_markup_and_open_access_boilerplate():
+    from caneta import journals
+
+    # every indexed journal is Diamond OA: "acesso aberto e gratuito" must not pull in a music journal
+    text = ("O acesso aberto e gratuito ao conteúdo científico depende da comunicação científica, "
+            "da bibliometria e da produção científica [@silva2023] (Seção [2](#sec:x){reference-type=\"ref\" "
+            "reference=\"sec:x\"}).")
+    assert "type" not in journals.tokens(text) and "silva" not in journals.tokens(text)
+    top = journals.match(text, k=5)
+    assert all("Vortex" not in r["journal"] for r in top)
+    assert any(r["area"] == "Ciencias_Sociais_Aplicadas" for r in top[:3])

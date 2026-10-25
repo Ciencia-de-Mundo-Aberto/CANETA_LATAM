@@ -33,13 +33,25 @@ trabalho trabalhos trabajo trabajos work works paper papers resultados results r
 methods method objetivo objective aims scope escopo publica publicar publish publishes original originais
 cientifico cientifica scientific cientificos area areas campo field also tambem tambien new novo nueva nuevo
 mostram mostra aumenta descreve describe describes presente present apresenta neste nesta
+revistas periodico periodicos journals articulos artigos articles
+aberto aberta abiertos abierto abierta open acesso acceso access gratuito gratuita gratuitos gratis free
+diamante diamond online conteudo contenido content licenca licencia license creative commons issn qualis
+publicacao publicacoes publicacion publicaciones publication publications pares peer review avaliados
 """.split())
+# every journal in the index is Diamond OA: words about open access, licences and peer review only repeat
+# that (a music journal "100% gratuito, de acesso aberto" must not match a text about open access)
+MARKUP = re.compile(
+    r"\\[pt]?cite[pt]?\*?(\[[^\]]*\])*\{[^}]*\}"  # LaTeX citations
+    r"|\\(?:eq)?ref\{[^}]*\}|\\label\{[^}]*\}"     # cross-references and labels
+    r"|\[@[^\]]*\]|@[\w:.-]+"                       # pandoc citations
+    r"|\{[^{}]*=[^{}]*\}|\(#[^)]*\)"                # pandoc attributes {reference-type=...} and #anchors
+    r"|https?://\S+|\$[^$]*\$")                     # URLs and math
 STEM = 5  # compare the first 5 letters: biologia/biology/biología → "biolo", marinho/marine/marino → "marin"
 
 
 def tokens(text: str) -> list[str]:
     """Folded, stopword-free word stems, so pt/es/en texts and scopes can match each other."""
-    return [w[:STEM] for w in re.findall(r"[a-z]{3,}", fold(text)) if w not in STOPWORDS]
+    return [w[:STEM] for w in re.findall(r"[a-z]{3,}", fold(MARKUP.sub(" ", text))) if w not in STOPWORDS]
 
 
 @lru_cache(maxsize=1)
