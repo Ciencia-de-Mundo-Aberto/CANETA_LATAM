@@ -12,9 +12,21 @@
   {% if g.edit %}
     <p class="small diff"><del>{{ g.edit.find }}</del> → <ins>{{ g.edit.replace }}</ins></p>
   {% endif %}
-  {% if error %}<p class="err small">{{ error }}</p>{% endif %}
+  {% if error %}<div class="notice err">{{ error }}</div>
+  {% elif g.stale %}<div class="notice warn">{{ t('stale_finding') }}</div>{% endif %}
   {% if refresh %}<p class="ok small">{{ t('applied_reload') }} <a href="/p/{{ slug }}/s/{{ sid }}#revisao">{{ t('reload') }}</a></p>{% endif %}
-  {% if g.state == 'aberto' %}
+  {% if g.state == 'aberto' and g.stale %}
+  <div class="row">
+    <button class="small" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "resolve"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('already_fixed') }}</button>
+    <button class="small ghost" @click="mode = mode == 'reject' ? '' : 'reject'">{{ t('reject') }}</button>
+    <button class="small ghost" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "defer"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('defer') }}</button>
+  </div>
+  <form x-show="mode == 'reject'" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-target="#g-{{ g.id }}" hx-swap="outerHTML" class="stack">
+    <input type="hidden" name="number" value="{{ number }}"><input type="hidden" name="group" value="{{ g.id }}"><input type="hidden" name="action" value="reject">
+    <input name="reason" placeholder="{{ t('reject_reason') }}" required>
+    <button class="small">{{ t('confirm_reject') }}</button>
+  </form>
+  {% elif g.state == 'aberto' %}
   <div class="row">
     {% if g.edit %}<button class="primary small" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "accept"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('accept_edit') }}</button>
     {% else %}<button class="small" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "accept"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('accept_will_fix') }}</button>{% endif %}

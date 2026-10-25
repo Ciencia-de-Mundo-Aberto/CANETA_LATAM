@@ -245,5 +245,8 @@
  "ocr_may_err": "OCR: pode ter erros de reconhecimento",
  "use_ocr": "usar OCR nos PDFs digitalizados (lento)",
  "ocr_not_installed": "PDFs digitalizados precisam de OCR, que não está instalado:",
- "semantic_hint": "Proximidade de significado com o título e a introdução do seu texto"
+ "semantic_hint": "Proximidade de significado com o título e a introdução do seu texto",
+ "stale_finding": "Este trecho não está mais no texto: a seção mudou depois desta revisão (por exemplo, foi polida ou editada). Corrija direto no editor, se ainda fizer sentido, e clique em “Já corrigi”, ou rejeite/adie.",
+ "already_fixed": "Já corrigi",
+ "section_busy": "Há uma tarefa em andamento nesta seção. As ações ficam bloqueadas até ela terminar."
 }

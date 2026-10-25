@@ -105,3 +105,47 @@ def test_search_flow_with_stubbed_mcp(client, monkeypatch):
     sid = nxt.rsplit("/", 1)[1]
     client.post(f"/p/{slug}/references/add", data={"search_id": sid, "picks": [0]})
     assert store.load(slug).references()[0]["id"] == "mendonca2022hydroids"
+
+
+def test_one_task_per_section_and_stale_findings(client, fake, monkeypatch):
+    import threading
+
+    from caneta import jobs
+
+    gate = threading.Event()
+    provider = fake(default={"parecer": "revisar", "findings": [
+        {"excerpt": "cerca de R$ 1 bilhão", "rotulo": "Clareza", "prioridade": "média", "descricao": "Vago."}]})
+    slow = provider.complete
+
+    def blocked(*a, **k):
+        gate.wait(5)
+        return slow(*a, **k)
+
+    monkeypatch.setattr(provider, "complete", blocked)
+    monkeypatch.setattr(registry, "build", lambda *a, **k: provider)
+    slug = client.post("/projects/new", data={"title": "Trava", "lang": "pt_BR", "structure": "imrad"}
+                       ).headers["HX-Redirect"].split("/")[2]
+    sid = store.load(slug).sections[1].id
+    client.post(f"/p/{slug}/s/{sid}/save", data={"text": "O acordo custa cerca de R$ 1 bilhão por ano."})
+
+    first = client.post(f"/p/{slug}/s/{sid}/review", data={}).text
+    job_id = re.search(r"/jobs/([0-9a-f]+)", first).group(1)
+    # while the review runs: a second review and a polish return the same running job, nothing new starts
+    for path in ("review", "polish"):
+        assert f"/jobs/{job_id}" in client.post(f"/p/{slug}/s/{sid}/{path}", data={}).text
+    page = client.get(f"/p/{slug}/s/{sid}").text
+    assert 'class="job running"' in page and 'id="busy-note"' in page
+    gate.set()
+    wait_job(client, first)
+    assert jobs.running(f"{slug}/{sid}") is None
+
+    # the text changes after the review (e.g. a polish): the finding is flagged instead of failing silently
+    client.post(f"/p/{slug}/s/{sid}/save", data={"text": "O acordo de 2026 consolida o modelo."})
+    page = client.get(f"/p/{slug}/s/{sid}").text
+    gid = re.search(r'id="g-(G1-\d+)"', page).group(1)
+    assert "Este trecho não está mais no texto" in page and "Já corrigi" in page
+    card = client.post(f"/p/{slug}/s/{sid}/decide", data={"number": 1, "group": gid, "action": "edit",
+                                                         "replace": "x"}).text
+    assert "notice err" in card
+    card = client.post(f"/p/{slug}/s/{sid}/decide", data={"number": 1, "group": gid, "action": "resolve"}).text
+    assert "resolvido" in card

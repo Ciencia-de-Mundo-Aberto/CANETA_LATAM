@@ -46,6 +46,20 @@ window.caneta = (function () {
     });
   }
 
+  // one task per section: while one runs (#job .running), the action buttons stay disabled
+  function syncBusy() {
+    const busy = !!document.querySelector("#job .job.running");
+    document.querySelectorAll(".tool button, .busy-lock").forEach((b) => { b.disabled = busy; });
+    const note = document.getElementById("busy-note");
+    if (note) note.hidden = !busy;
+  }
+  document.addEventListener("DOMContentLoaded", syncBusy);
+  document.addEventListener("htmx:afterSettle", syncBusy);
+  document.addEventListener("htmx:beforeRequest", (e) => {
+    const form = e.detail.elt && e.detail.elt.closest && e.detail.elt.closest(".tool");
+    if (form) document.querySelectorAll(".tool button, .busy-lock").forEach((b) => { b.disabled = true; });
+  });
+
   let isDirty = false;
   function dirty(v) { isDirty = v; }
 

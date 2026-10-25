@@ -91,6 +91,9 @@ def create_app(token: str | None = None) -> FastAPI:
     def job_response(request: Request, job: jobs.Job):
         return render(request, "partials/job.html", job=job)
 
+    def section_key(slug: str, sid: str) -> str:
+        return f"{slug}/{sid}"
+
     # ------------------------------------------------------------------ home / setup
     @app.get("/", response_class=HTMLResponse)
     def home(request: Request):
@@ -216,9 +219,13 @@ def create_app(token: str | None = None) -> FastAPI:
     def workspace(request: Request, slug: str, sid: str):
         proj = store.load(slug)
         sec = proj.section(sid)
+        text = proj.read_section(sid)
         latest = rounds.latest(proj, sid)
+        if latest:
+            rounds.mark_stale(text, latest["groups"])
         refs = proj.references()
-        return render(request, "workspace.html", proj=proj, sec=sec, text=proj.read_section(sid), latest=latest,
+        return render(request, "workspace.html", proj=proj, sec=sec, text=text, latest=latest,
+                      running=jobs.running(section_key(slug, sid)),
                       history=proj.history(sid)[:30], refs=refs, cited=set(references.cited_keys(proj.read_section(sid))),
                       roles=ROLES, enrich=sec.kind in ENRICH_KINDS, compare=sec.kind in COMPARE_KINDS,
                       fulltext_keys=[r["id"] for r in refs if (r.get("caneta") or {}).get("fulltext") in
@@ -287,6 +294,9 @@ def create_app(token: str | None = None) -> FastAPI:
     # ------------------------------------------------------------------ review
     @app.post("/p/{slug}/s/{sid}/review", response_class=HTMLResponse)
     def section_review(request: Request, slug: str, sid: str, adversary: str = Form(""), text: str = Form(None)):
+        busy = jobs.running(section_key(slug, sid))
+        if busy:  # one task per section: a second click shows the running one
+            return job_response(request, busy)
         proj = store.load(slug)
         autosave(proj, sid, text)
 
@@ -295,7 +305,7 @@ def create_app(token: str | None = None) -> FastAPI:
             # the query string forces a real reload (a hash-only change would just scroll)
             job.next_url = f"/p/{slug}/s/{sid}?rodada={data['round']}#revisao"
 
-        return job_response(request, jobs.start("Revisão da seção", work))
+        return job_response(request, jobs.start("Revisão da seção", work, key=section_key(slug, sid)))
 
     @app.post("/p/{slug}/s/{sid}/decide", response_class=HTMLResponse)
     def section_decide(request: Request, slug: str, sid: str, number: int = Form(...), group: str = Form(...),
@@ -307,6 +317,7 @@ def create_app(token: str | None = None) -> FastAPI:
         except rounds.ReviewError as exc:
             error = str(exc)
             g = next(x for x in rounds.load_round(proj, sid, number)["groups"] if x["id"] == group)
+        rounds.mark_stale(proj.read_section(sid), [g])
         changed_text = action in ("accept", "edit") and not error and bool(g.get("edit") or action == "edit")
         resp = render(request, "partials/group_card.html", g=g, number=number, slug=slug, sid=sid, error=error,
                       roles=ROLES, refresh=changed_text)
@@ -316,6 +327,9 @@ def create_app(token: str | None = None) -> FastAPI:
 
     # ------------------------------------------------------------------ AI writing proposals
     def _proposal_job(request, slug, sid, title, fn, *args, text: str | None = None):
+        busy = jobs.running(section_key(slug, sid))
+        if busy:
+            return job_response(request, busy)
         proj = store.load(slug)
         autosave(proj, sid, text)
 
@@ -325,7 +339,7 @@ def create_app(token: str | None = None) -> FastAPI:
             PROPOSALS[pid] = {"slug": slug, **prop.as_dict()}
             job.next_url = f"/proposals/{pid}"
 
-        return job_response(request, jobs.start(title, work))
+        return job_response(request, jobs.start(title, work, key=section_key(slug, sid)))
 
     @app.post("/p/{slug}/s/{sid}/polish", response_class=HTMLResponse)
     def section_polish(request: Request, slug: str, sid: str, extra: str = Form(""), text: str = Form(None)):

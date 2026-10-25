@@ -19,7 +19,19 @@ from ..llm.base import NullProvider, Provider
 from ..project import Project, ProjectError, now, read_json, write_json
 from ..sections import fold
 from . import anchoring
-from .schemas import ACCEPTED, DEFERRED, EDITED, FINDING_SCHEMA, OPEN, RANK, REJECTED, ROLES, norm, roles_for
+from .schemas import (
+    ACCEPTED,
+    DEFERRED,
+    EDITED,
+    FINDING_SCHEMA,
+    OPEN,
+    RANK,
+    REJECTED,
+    RESOLVED,
+    ROLES,
+    norm,
+    roles_for,
+)
 
 SIMILAR_RATIO = 0.6
 
@@ -234,6 +246,19 @@ def _sha(text: str) -> str:
 
 
 # ------------------------------------------------------------------ author decisions
+STALE_MSG = ("este trecho não está mais no texto (a seção mudou depois da revisão): corrija direto no editor "
+             "e clique em 'Já corrigi', ou rejeite/adie")
+
+
+def mark_stale(text: str, groups: list[dict]) -> list[dict]:
+    """Flag open findings whose passage is no longer in the section exactly once (the text was polished,
+    edited or rewritten after the review): their edit buttons cannot work."""
+    for g in groups:
+        target = (g.get("edit") or {}).get("find") or g["excerpt"]
+        g["stale"] = g["state"] == OPEN and text.count(target) != 1
+    return groups
+
+
 def decide(project: Project, section_id: str, number: int, group_id: str, action: str,
            replace: str | None = None, reason: str | None = None) -> dict:
     data = load_round(project, section_id, number)
@@ -245,7 +270,7 @@ def decide(project: Project, section_id: str, number: int, group_id: str, action
         edit = group.get("edit")
         if edit:
             if text.count(edit["find"]) != 1:
-                raise ReviewError("o trecho mudou desde a revisão; use 'Editar' para escrever a correção")
+                raise ReviewError(STALE_MSG)
             project.write_section(section_id, text.replace(edit["find"], edit["replace"], 1), f"revisao {group_id}")
         group["state"] = ACCEPTED
     elif action == "edit":
@@ -253,14 +278,15 @@ def decide(project: Project, section_id: str, number: int, group_id: str, action
             raise ReviewError("escreva o novo texto")
         target = (group.get("edit") or {}).get("find") or group["excerpt"]
         if text.count(target) != 1:
-            # the excerpt may be whitespace-normalised: fall back to a normalised search
-            raise ReviewError("não encontrei o trecho exatamente uma vez; edite direto no editor da seção")
+            raise ReviewError(STALE_MSG)
         project.write_section(section_id, text.replace(target, replace, 1), f"revisao {group_id} editada")
         group["state"] = EDITED
     elif action == "reject":
         if not (reason or "").strip():
             raise ReviewError("informe o motivo da rejeição")
         group["state"] = REJECTED
+    elif action == "resolve":
+        group["state"] = RESOLVED
     elif action == "defer":
         group["state"] = DEFERRED
     elif action == "reopen":

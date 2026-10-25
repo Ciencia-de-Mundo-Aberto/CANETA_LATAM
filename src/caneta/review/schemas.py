@@ -16,7 +16,8 @@ LABELS = ("Erro", "Inconsistência", "Exagero", "Imprecisão", "Evidência insuf
 PRIORITIES = ("crítica", "alta", "média", "baixa")
 RANK = {"crítica": 3, "alta": 2, "média": 1, "baixa": 0}
 OPEN, ACCEPTED, EDITED, REJECTED, DEFERRED = "aberto", "aceito", "editado", "rejeitado", "adiado"
-GROUP_STATES = (OPEN, ACCEPTED, EDITED, REJECTED, DEFERRED)
+RESOLVED = "resolvido"  # the author fixed it directly in the editor
+GROUP_STATES = (OPEN, ACCEPTED, EDITED, REJECTED, DEFERRED, RESOLVED)
 MAX_FINDINGS = 8
 
 FINDING_SCHEMA = {

@@ -245,5 +245,8 @@
  "ocr_may_err": "OCR: may contain recognition errors",
  "use_ocr": "use OCR on scanned PDFs (slow)",
  "ocr_not_installed": "Scanned PDFs need OCR, which is not installed:",
- "semantic_hint": "Closeness in meaning to your title and introduction"
+ "semantic_hint": "Closeness in meaning to your title and introduction",
+ "stale_finding": "This passage is no longer in the text: the section changed after this review (e.g. it was polished or edited). Fix it directly in the editor if it still applies and click “Already fixed”, or reject/defer it.",
+ "already_fixed": "Already fixed",
+ "section_busy": "A task is running in this section. Actions are locked until it finishes."
 }

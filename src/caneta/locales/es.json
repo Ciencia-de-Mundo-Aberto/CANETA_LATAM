@@ -245,5 +245,8 @@
  "ocr_may_err": "OCR: puede tener errores",
  "use_ocr": "usar OCR en PDF escaneados (lento)",
  "ocr_not_installed": "Los PDF escaneados necesitan OCR, que no está instalado:",
- "semantic_hint": "Cercanía de significado con el título y la introducción de tu texto"
+ "semantic_hint": "Cercanía de significado con el título y la introducción de tu texto",
+ "stale_finding": "Este fragmento ya no está en el texto: la sección cambió después de esta revisión (por ejemplo, fue pulida o editada). Corrígelo directamente en el editor, si aún tiene sentido, y haz clic en “Ya lo corregí”, o recházalo/pospónlo.",
+ "already_fixed": "Ya lo corregí",
+ "section_busy": "Hay una tarea en curso en esta sección. Las acciones quedan bloqueadas hasta que termine."
 }

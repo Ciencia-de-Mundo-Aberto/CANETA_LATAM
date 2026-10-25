@@ -55,7 +55,8 @@
       </form>
     {% endif %}
 
-    <div id="job"></div>
+    <div id="job">{% if running %}{% with job = running %}{% include "partials/job.html" %}{% endwith %}{% endif %}</div>
+    <p id="busy-note" class="notice warn small" hidden>{{ t('section_busy') }}</p>
 
     <h2 id="revisao">{{ t('review') }}</h2>
     {% if latest %}
