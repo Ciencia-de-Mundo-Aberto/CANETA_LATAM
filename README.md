@@ -50,6 +50,7 @@ Os Releases também trazem `.zip` com `install.bat` (Windows), `Instalar CANETA.
 
 | Variável | Efeito |
 |---|---|
+| `CANETA_SEMANTIC=1` | Inclui a **busca por significado** (+≈550 MB, download único), que melhora muito as sugestões de revista para textos ensaísticos ou interdisciplinares. No `.exe`, é uma caixa de seleção. Se ela já estava ativa, as atualizações a mantêm. Também pode ser ativada depois, em Configurações. |
 | `CANETA_OCR=1` | Inclui OCR para PDFs **digitalizados** (+≈80 MB). PDFs digitais comuns não precisam dele. No `.exe`, é uma caixa de seleção. |
 | `CANETA_REF=main` | Instala outra tag ou branch. O padrão é a versão do instalador (`v0.1.3`). |
 

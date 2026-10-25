@@ -466,7 +466,8 @@ def create_app(token: str | None = None) -> FastAPI:
         text = proj.title + "\n" + "\n".join(proj.read_section(s.id) for s in proj.sections
                                              if s.kind in ("abstract", "intro", "conclusion"))
         return render(request, "journal.html", proj=proj, ranked=journals.match(text, k=5),
-                      all_journals=sorted(journals.load_index(), key=lambda r: r["journal"]))
+                      all_journals=sorted(journals.load_index(), key=lambda r: r["journal"]),
+                      semantic_on=semantic.enabled(), SEMANTIC_SIZE=extras.SEMANTIC_SIZE)
 
     @app.post("/p/{slug}/journal", response_class=HTMLResponse)
     def journal_choose(request: Request, slug: str, journal_id: str = Form(...)):

@@ -248,5 +248,7 @@
  "semantic_hint": "Closeness in meaning to your title and introduction",
  "stale_finding": "This passage is no longer in the text: the section changed after this review (e.g. it was polished or edited). Fix it directly in the editor if it still applies and click “Already fixed”, or reject/defer it.",
  "already_fixed": "Already fixed",
- "section_busy": "A task is running in this section. Actions are locked until it finishes."
+ "section_busy": "A task is running in this section. Actions are locked until it finishes.",
+ "semantic_tip": "These suggestions compare words. For essay-like or interdisciplinary texts, meaning-based search is much more accurate (one-time {size} download, runs on your computer).",
+ "semantic_tip_link": "Turn it on in Settings →"
 }

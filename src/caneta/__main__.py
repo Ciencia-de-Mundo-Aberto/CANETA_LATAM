@@ -3,6 +3,7 @@
     caneta                 # free port, opens the browser
     caneta --port 8765     # fixed port
     caneta --no-browser    # print the URL instead
+    caneta --enable-semantic   # download the meaning-search model and turn it on (installers use this)
 """
 
 from __future__ import annotations
@@ -33,7 +34,15 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--port", type=int, default=0)
     parser.add_argument("--no-browser", action="store_true")
     parser.add_argument("--version", action="version", version=f"caneta {__version__}")
+    parser.add_argument("--enable-semantic", action="store_true",
+                        help="baixa o modelo da busca por significado (≈0,5 GB), ativa e sai (usado pelos instaladores)")
     args = parser.parse_args(argv)
+
+    if args.enable_semantic:
+        from . import semantic
+
+        semantic.enable(lambda line: print(line, flush=True))
+        return
 
     import uvicorn
 

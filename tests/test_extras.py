@@ -95,3 +95,27 @@ def test_born_digital_pdf_never_needs_ocr(tmp_path, monkeypatch):
     monkeypatch.setattr(ingest, "_run_converter", fake_run)
     monkeypatch.setattr(extras, "ocr_available", lambda: True)
     assert ingest.convert_pdf(pdf)[1] == "pdf-layout" and calls == ["layout"]
+
+
+def test_journal_page_suggests_meaning_search_only_when_off(monkeypatch):
+    c = TestClient(create_app(token="tok"))
+    c.get("/auth", params={"t": "tok"})
+    slug = c.post("/projects/new", data={"title": "Hidroides", "lang": "pt_BR", "structure": "imrad"}
+                  ).headers["HX-Redirect"].split("/")[2]
+    assert "busca por significado acerta" in c.get(f"/p/{slug}/journal").text
+    monkeypatch.setattr(semantic, "enabled", lambda: True)
+    monkeypatch.setattr(semantic, "embed", fake_embed)
+    journals._journal_vectors.cache_clear()
+    try:
+        assert "busca por significado acerta" not in c.get(f"/p/{slug}/journal").text
+    finally:
+        journals._journal_vectors.cache_clear()
+
+
+def test_cli_enable_semantic_for_installers(monkeypatch):
+    from caneta.__main__ import main
+
+    calls = []
+    monkeypatch.setattr(semantic, "enable", lambda log: calls.append(log))
+    main(["--enable-semantic"])  # must not start the server
+    assert len(calls) == 1

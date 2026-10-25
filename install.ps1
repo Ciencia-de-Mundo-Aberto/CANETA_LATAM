@@ -23,7 +23,12 @@ if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
 Write-Host "[2/3] Baixando e instalando a CANETA $ref do GitHub (1 a 3 minutos)..."
 # Sempre pelo endereco, nunca pelo nome: no PyPI existe outro pacote chamado 'caneta'.
 # Opcional: $env:CANETA_OCR = "1" inclui o OCR para PDFs digitalizados (+~80 MB). PDFs recentes nao precisam.
+# Opcional: $env:CANETA_SEMANTIC = "1" inclui a busca por significado (+~550 MB), que melhora muito as
+# sugestoes de revista. Se ela ja estava ativa, a atualizacao a mantem.
 $extra = if ($env:CANETA_OCR -eq "1") { @("--with", "rapidocr-onnxruntime>=1.4.4") } else { @() }
+$cfg = Join-Path $(if ($env:CANETA_HOME) { $env:CANETA_HOME } else { Join-Path $HOME ".caneta" }) "config.json"
+$semantic = ($env:CANETA_SEMANTIC -eq "1") -or ((Test-Path $cfg) -and ((Get-Content $cfg -Raw) -match '"semantic":\s*true'))
+if ($semantic) { $extra += @("--with", "fastembed>=0.9") }
 if ($env:CANETA_SOURCE) {
     uv tool install --python 3.12 --force @extra $env:CANETA_SOURCE
 } else {
@@ -31,9 +36,14 @@ if ($env:CANETA_SOURCE) {
 }
 if ($LASTEXITCODE -ne 0) { throw "Falha ao instalar a CANETA." }
 uv tool update-shell | Out-Null
+$exe = Join-Path (uv tool dir --bin) "caneta.exe"
+if ($semantic) {
+    Write-Host "      Baixando o modelo da busca por significado (~0,5 GB, so na primeira vez)..."
+    & $exe --enable-semantic
+    if ($LASTEXITCODE -ne 0) { Write-Host "      (nao foi ativada; tente depois em Configuracoes)" }
+}
 
 Write-Host "[3/3] Criando atalho no Menu Iniciar..."
-$exe = Join-Path (uv tool dir --bin) "caneta.exe"
 try {
     $shortcut = Join-Path ([Environment]::GetFolderPath("Programs")) "CANETA.lnk"
     $link = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcut)

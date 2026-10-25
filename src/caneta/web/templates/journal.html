@@ -6,6 +6,7 @@
 <div id="job"></div>
 
 <h2>{{ t('top5') }}</h2>
+{% if not semantic_on %}<div class="notice warn small">{{ t('semantic_tip', size=SEMANTIC_SIZE) }} <a href="/setup#recursos">{{ t('semantic_tip_link') }}</a></div>{% endif %}
 {% if not ranked %}<p class="muted">{{ t('no_ranking') }}</p>{% endif %}
 <div class="cards">
 {% for j in ranked %}
