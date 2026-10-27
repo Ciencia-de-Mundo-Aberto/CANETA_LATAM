@@ -175,7 +175,7 @@ def test_fetch_template_retries_a_refused_download(tmp_path, monkeypatch):
             return httpx.Response(200, content=b"PK\x03\x04docx")
 
     monkeypatch.setattr(httpx, "Client", Flaky)
-    monkeypatch.setattr(journals.time if hasattr(journals, "time") else __import__("time"), "sleep", lambda s: None)
+    monkeypatch.setattr("time.sleep", lambda s: None)
     monkeypatch.setattr(journals, "template_sources", lambda jid: [{"file": "t.docx", "url": "https://x/t.docx"}])
     saved = journals.fetch_template("any", tmp_path)
     assert [p.name for p in saved] == ["t.docx"] and len(calls) == 2
