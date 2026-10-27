@@ -133,3 +133,5 @@ label.result p { margin: 4px 0; }
 .prose hr { border: 0; border-top: 1px solid var(--line); margin: 2.5em 0; }
 .prose .footnotes { font-size: .85rem; color: var(--muted); }
 .badge.warn { background: rgba(242,193,78,.3); }
+[x-cloak] { display: none !important; }
+.toast { background: var(--surface) !important; border: 1px solid var(--err); position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 50; max-width: 90vw; box-shadow: 0 4px 16px rgba(0,0,0,.2); }

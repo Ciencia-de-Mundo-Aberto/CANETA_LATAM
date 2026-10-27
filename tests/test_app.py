@@ -149,3 +149,24 @@ def test_one_task_per_section_and_stale_findings(client, fake, monkeypatch):
     assert "notice err" in card
     card = client.post(f"/p/{slug}/s/{sid}/decide", data={"number": 1, "group": gid, "action": "resolve"}).text
     assert "resolvido" in card
+
+
+def test_review_card_buttons_post_to_the_section_url(client, fake, monkeypatch):
+    """The cards' buttons must work from the rendered page (they once posted to /p//s//decide → 404)."""
+    provider = fake(default={"parecer": "revisar", "findings": [
+        {"excerpt": "cerca de um bilhão", "rotulo": "Clareza", "prioridade": "média", "descricao": "Vago."}]})
+    monkeypatch.setattr(registry, "build", lambda *a, **k: provider)
+    slug = client.post("/projects/new", data={"title": "Botões", "lang": "pt_BR", "structure": "imrad"}
+                       ).headers["HX-Redirect"].split("/")[2]
+    sid = store.load(slug).sections[1].id
+    client.post(f"/p/{slug}/s/{sid}/save", data={"text": "O acordo custa cerca de um bilhão por ano."})
+    wait_job(client, client.post(f"/p/{slug}/s/{sid}/review", data={}).text)
+    page = client.get(f"/p/{slug}/s/{sid}").text
+    posts = set(re.findall(r'hx-post="([^"]*/decide)"', page))
+    assert posts == {f"/p/{slug}/s/{sid}/decide"}
+    gid = re.search(r'id="g-(G1-\d+)"', page).group(1)
+    card = client.post(posts.pop(), data={"number": 1, "group": gid, "action": "edit",
+                                         "replace": "cerca de R$ 1 bilhão"})
+    assert card.status_code == 200 and "editado" in card.text
+    assert "R$ 1 bilhão por ano" in store.load(slug).read_section(sid)
+    assert "o revisor não propôs um texto" in page  # the buttons explain themselves

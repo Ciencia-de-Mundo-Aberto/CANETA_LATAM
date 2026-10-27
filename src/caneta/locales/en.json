@@ -250,5 +250,11 @@
  "already_fixed": "Already fixed",
  "section_busy": "A task is running in this section. Actions are locked until it finishes.",
  "semantic_tip": "These suggestions compare words. For essay-like or interdisciplinary texts, meaning-based search is much more accurate (one-time {size} download, runs on your computer).",
- "semantic_tip_link": "Turn it on in Settings →"
+ "semantic_tip_link": "Turn it on in Settings →",
+ "accept_edit_hint": "Applies the reviewer's proposed fix (shown above) to the text and marks it accepted.",
+ "accept_will_fix_hint": "You agree, but the reviewer proposed no text: marks it accepted and changes nothing. Fix it yourself in the editor.",
+ "edit_hint": "Opens a field with the flagged passage: write your version and click “Apply my text” to replace it in the text.",
+ "reject_hint": "You disagree: give the reason (it is recorded).",
+ "defer_hint": "Leaves it for later, without changing the text.",
+ "request_failed": "The action could not be completed (error {status}). Reload the page and try again."
 }

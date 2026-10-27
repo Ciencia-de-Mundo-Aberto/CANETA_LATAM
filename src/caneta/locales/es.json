@@ -250,5 +250,11 @@
  "already_fixed": "Ya lo corregí",
  "section_busy": "Hay una tarea en curso en esta sección. Las acciones quedan bloqueadas hasta que termine.",
  "semantic_tip": "Estas sugerencias comparan palabras. Para textos ensayísticos o interdisciplinarios, la búsqueda por significado acierta mucho más (descarga única de {size}, funciona en tu computadora).",
- "semantic_tip_link": "Activar en Configuración →"
+ "semantic_tip_link": "Activar en Configuración →",
+ "accept_edit_hint": "Aplica al texto la corrección propuesta por el revisor (mostrada arriba) y la marca como aceptada.",
+ "accept_will_fix_hint": "Estás de acuerdo con la observación, pero el revisor no propuso un texto: la marca como aceptada y no cambia nada. Corrígelo tú en el editor.",
+ "edit_hint": "Abre un campo con el fragmento señalado: escribe tu versión y haz clic en “Aplicar mi texto” para reemplazarlo en el texto.",
+ "reject_hint": "No estás de acuerdo: indica el motivo (queda registrado).",
+ "defer_hint": "Lo deja para después, sin cambiar el texto.",
+ "request_failed": "No se pudo completar la acción (error {status}). Recarga la página e inténtalo de nuevo."
 }

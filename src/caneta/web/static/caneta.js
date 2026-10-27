@@ -60,6 +60,22 @@ window.caneta = (function () {
     if (form) document.querySelectorAll(".tool button, .busy-lock").forEach((b) => { b.disabled = true; });
   });
 
+  // a failed click must never be silent (a 404 once left every review button doing nothing)
+  document.addEventListener("htmx:responseError", (e) => {
+    const msg = (document.body.dataset.requestFailed || "Erro {status}").replace("{status}", e.detail.xhr.status);
+    let toast = document.getElementById("toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.id = "toast";
+      toast.className = "notice err toast";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.hidden = false;
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { toast.hidden = true; }, 8000);
+  });
+
   let isDirty = false;
   function dirty(v) { isDirty = v; }
 

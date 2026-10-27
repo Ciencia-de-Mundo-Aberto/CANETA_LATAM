@@ -64,6 +64,7 @@
         {% if latest.errors %}<span class="err">· {{ t('review_errors') }}: {{ latest.errors | join(', ') }}</span>{% endif %}</p>
       {% if not latest.groups %}<div class="notice ok">{{ t('no_findings') }}</div>{% endif %}
       <div class="groups">
+        {% set slug = proj.slug %}{% set sid = sec.id %}{# group_card builds its /decide URLs from these #}
         {% for g in latest.groups %}{% set number = latest.round %}{% include "partials/group_card.html" %}{% endfor %}
       </div>
     {% else %}
