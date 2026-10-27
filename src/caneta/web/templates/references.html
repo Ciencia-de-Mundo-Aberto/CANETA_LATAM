@@ -29,16 +29,23 @@
 <div id="job"></div>
 
 <h2>{{ t('project_refs') }} ({{ refs|length }})</h2>
+{% if missing %}
+<div class="notice warn row">
+  <span>{{ t('refs_missing_basis', n=missing) }}</span>
+  <button class="small primary" hx-post="/p/{{ proj.slug }}/references/complete" hx-target="#job">{{ t('complete_refs') }}</button>
+</div>
+{% endif %}
 {% if refs %}
 <form hx-post="/p/{{ proj.slug }}/references/fulltext" hx-target="#job">
 <table class="list">
-  <tr><th></th><th>{{ t('reference') }}</th><th>{{ t('key') }}</th><th>{{ t('origin') }}</th><th>{{ t('full_text') }}</th><th></th></tr>
+  <tr><th></th><th>{{ t('reference') }}</th><th>{{ t('key') }}</th><th>{{ t('origin') }}</th><th>{{ t('ref_basis') }}</th><th>{{ t('full_text') }}</th><th></th></tr>
   {% for r in refs %}{% set m = r.caneta or {} %}
   <tr>
     <td><input type="checkbox" name="keys" value="{{ r.id }}"></td>
     <td>{{ ref_label(r) }}{% if r.DOI %} <a class="small" href="https://doi.org/{{ r.DOI }}" target="_blank" rel="noopener">doi</a>{% endif %}</td>
     <td><code>[@{{ r.id }}]</code></td>
     <td class="small">{{ m.source or '—' }}{% if m.diamond %} · 💎 Diamond{% endif %}{% if m.source == 'upload' and not m.verified %} · <span class="warn">{{ t('unverified') }}</span>{% endif %}</td>
+    <td class="small" {% if preview[r.id] %}title="{{ t('basis_check') }} {{ preview[r.id] }}"{% endif %}>{% set b = basis[r.id] %}{% if b == 'Só o título' %}<span class="warn" title="{{ t('basis_title_only_hint') }}">{{ t('basis_title_only') }}</span>{% elif b == 'Resumo' %}{{ t('basis_abstract') }}{% if m.abstract_source %} <span class="muted">({{ m.abstract_source }})</span>{% endif %}{% elif b == 'Conteúdo da página' %}{{ t('basis_page') }}{% else %}{{ t('basis_fulltext') }}{% endif %}</td>
     <td class="small">{% if m.fulltext == 'pdf-not-converted' %}<span class="badge warn" title="{{ t('scanned_hint') }}">📄 {{ t('scanned_pdf') }}</span>{% elif m.fulltext == 'pdf-ocr' %}{{ m.fulltext }} <span class="muted">({{ t('ocr_may_err') }})</span>{% else %}{{ m.fulltext or '—' }}{% endif %}</td>
     <td><button type="button" class="ghost small danger" hx-post="/p/{{ proj.slug }}/references/delete" hx-vals='{"key": "{{ r.id }}"}' hx-confirm="{{ t('confirm_remove_ref') }}">✕</button></td>
   </tr>

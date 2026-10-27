@@ -93,7 +93,10 @@ def _context(project: Project, section_id: str) -> dict:
 
 
 def cited_reference_block(project: Project, text: str, max_chars: int = 700) -> str:
-    """Labels + abstracts of the works this section cites (for the references reviewer)."""
+    """Labels + the best basis of each work this section cites (abstract, full-text excerpts, page text or
+    only the title), for the references reviewer. Local only: completing references is a separate step."""
+    from ..discovery import reference_context
+
     refs = {r["id"]: r for r in project.references()}
     lines = []
     for key in references.cited_keys(text):
@@ -101,8 +104,8 @@ def cited_reference_block(project: Project, text: str, max_chars: int = 700) -> 
         if not ref:
             lines.append(f"- @{key}: (NÃO consta nas referências do projeto)")
             continue
-        abstract = norm(ref.get("abstract"))[:max_chars] or "(sem resumo disponível)"
-        lines.append(f"- @{key}: {references.label(ref)}\n  Resumo: {abstract}")
+        kind, basis = reference_context(project, ref, max_chars, text)
+        lines.append(f"- @{key}: {references.label(ref)}\n  {kind}: {basis}")
     return "\n".join(lines) or "(a seção não cita nenhuma referência)"
 
 

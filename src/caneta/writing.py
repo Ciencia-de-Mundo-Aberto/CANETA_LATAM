@@ -13,7 +13,6 @@ from . import grounding, prompts, references, semantic
 from .llm.base import NoLLM, NullProvider, Provider
 from .project import Project
 from .review.anchoring import clean_edit
-from .review.schemas import norm
 
 POLISH_SCHEMA = {"texto": "a seção revisada, em Markdown, sem o título", "notas": "o que mudou, em poucas linhas"}
 ENRICH_SCHEMA = {"texto": "a seção inteira com as citações, em Markdown, sem o título",
@@ -91,15 +90,28 @@ def polish(project: Project, section_id: str, provider: Provider, extra: str = "
 
 def enrich_intro(project: Project, section_id: str, provider: Provider, keys: list[str], max_new: int = 3,
                  on_log=None) -> Proposal:
-    """Insert citations ONLY from the selected references (found by the MCP search)."""
+    """Insert citations ONLY from the selected references (found by the MCP search). References without an
+    abstract (e.g. from an imported .bib) are completed first from open sources; the AI then gets, for each
+    one, the best basis available: abstract, full-text excerpts, the page text, or only the title."""
+    from . import discovery
+
     _require_llm(provider)
-    refs = {r["id"]: r for r in project.references()}
-    chosen = [refs[k] for k in keys if k in refs]
-    if not chosen:
+    keys = [k for k in keys if k in {r["id"] for r in project.references()}]
+    if not keys:
         raise WritingError("selecione ao menos uma referência")
+    try:
+        discovery.complete_references(project, keys, fulltext=True, log=on_log)
+    except Exception as exc:  # noqa: BLE001 - offline or a source down: cite with what there is
+        if on_log:
+            on_log(f"Não foi possível completar as referências: {exc}")
+    refs = {r["id"]: r for r in project.references()}
+    chosen = [refs[k] for k in keys]
     text = project.read_section(section_id)
-    block = "\n".join(f"- [@{r['id']}] {references.label(r)}\n  Resumo: {norm(r.get('abstract'))[:900] or '(sem resumo)'}"
-                      for r in chosen)
+    lines = []
+    for r in chosen:
+        kind, basis = discovery.reference_context(project, r, 900, text)
+        lines.append(f"- [@{r['id']}] {references.label(r)}\n  {kind}: {basis}")
+    block = "\n".join(lines)
     prompt = prompts.render("enrich_intro", out_lang=prompts.out_lang(project.lang), references=block,
                             max_new=max_new, section_text=text or "(seção vazia: escreva um parágrafo curto)")
     data = _run(project, provider, "enrich_intro", section_id, prompt, ENRICH_SCHEMA, on_log)

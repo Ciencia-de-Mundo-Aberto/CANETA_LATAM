@@ -403,7 +403,12 @@ def create_app(token: str | None = None) -> FastAPI:
     def references_page(request: Request, slug: str, q: str = ""):
         proj = store.load(slug)
         intro = next((proj.read_section(s.id) for s in proj.sections if s.kind == "intro"), "")
-        return render(request, "references.html", proj=proj, refs=proj.references(), ref_label=references.label,
+        refs = proj.references()
+        basis = {r["id"]: discovery.basis_kind(proj, r) for r in refs}
+        preview = {r["id"]: discovery.basis_preview(proj, r) for r in refs}
+        return render(request, "references.html", proj=proj, refs=refs, ref_label=references.label, basis=basis,
+                      preview=preview,
+                      missing=sum(1 for k in basis.values() if k == "Só o título"),
                       ocr_available=extras.ocr_available(), semantic_on=semantic.enabled(),
                       material=ingest.list_material(proj), q=q or proj.data.get("last_query", ""),
                       suggested=_suggest_query(proj, intro))
@@ -451,6 +456,19 @@ def create_app(token: str | None = None) -> FastAPI:
             job.next_url = f"/p/{slug}/references"
 
         return job_response(request, jobs.start("Texto completo", work))
+
+    @app.post("/p/{slug}/references/complete", response_class=HTMLResponse)
+    def references_complete(request: Request, slug: str, keys: list[str] = Form([])):
+        """Abstracts by DOI, page text for web references, open full text: for references without a basis."""
+        proj = store.load(slug)
+
+        def work(job):
+            res = discovery.complete_references(proj, keys or None, fulltext=True, log=job.say)
+            job.say(f"Resumos: {res['abstract']} · páginas: {res['page']} · textos completos: {res['fulltext']} · "
+                    f"só o título: {len(res['missing'])}")
+            job.next_url = f"/p/{slug}/references"
+
+        return job_response(request, jobs.start("Completar referências", work))
 
     @app.post("/p/{slug}/references/delete")
     def references_delete(slug: str, key: str = Form(...)):

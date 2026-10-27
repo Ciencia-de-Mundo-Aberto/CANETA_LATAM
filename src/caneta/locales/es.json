@@ -259,5 +259,14 @@
  "request_failed": "No se pudo completar la acción (error {status}). Recarga la página e inténtalo de nuevo.",
  "accept_ai_fix": "De acuerdo (corregir con IA)",
  "accept_ai_fix_hint": "La IA reescribe el fragmento para resolver la observación. Ves el cambio (diff) y lo aceptas o descartas; al aceptarlo, la observación queda como editada.",
- "proposal_review_fix": "Corrección de la observación"
+ "proposal_review_fix": "Corrección de la observación",
+ "ref_basis": "Base para citar",
+ "basis_abstract": "resumen",
+ "basis_page": "contenido de la página",
+ "basis_fulltext": "texto completo",
+ "basis_title_only": "solo el título",
+ "basis_title_only_hint": "Sin resumen ni texto: la IA solo cita esta obra cuando el título sustenta la frase directamente. Usa “Completar resúmenes” para buscar más información.",
+ "refs_missing_basis": "{n} referencia(s) solo con el título (sin resumen). Sin resumen, la IA casi no puede citarlas. CANETA puede buscar el resumen por DOI (OpenAlex/Crossref), el contenido de la página (noticias, informes) y el texto completo abierto.",
+ "complete_refs": "Completar resúmenes",
+ "basis_check": "Verifica que corresponda a la obra:"
 }
