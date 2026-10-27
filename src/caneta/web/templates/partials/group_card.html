@@ -29,11 +29,13 @@
   {% elif g.state == 'aberto' %}
   <div class="row">
     {% if g.edit %}<button class="primary small" title="{{ t('accept_edit_hint') }}" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "accept"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('accept_edit') }}</button>
-    {% else %}<button class="small" title="{{ t('accept_will_fix_hint') }}" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "accept"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('accept_will_fix') }}</button>{% endif %}
+    {% else %}<button class="small" title="{{ t('accept_will_fix_hint') }}" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "accept"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('accept_will_fix') }}</button>
+    {% if cfg and cfg.provider != 'none' %}<button class="small primary busy-lock" title="{{ t('accept_ai_fix_hint') }}" hx-post="/p/{{ slug }}/s/{{ sid }}/fix" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}"}' hx-target="#fix-{{ g.id }}">{{ t('accept_ai_fix') }}</button>{% endif %}{% endif %}
     <button class="small ghost" title="{{ t('edit_hint') }}" @click="mode = mode == 'edit' ? '' : 'edit'">{{ t('edit') }}</button>
     <button class="small ghost" title="{{ t('reject_hint') }}" @click="mode = mode == 'reject' ? '' : 'reject'">{{ t('reject') }}</button>
     <button class="small ghost" title="{{ t('defer_hint') }}" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-vals='{"number": "{{ number }}", "group": "{{ g.id }}", "action": "defer"}' hx-target="#g-{{ g.id }}" hx-swap="outerHTML">{{ t('defer') }}</button>
   </div>
+  <div id="fix-{{ g.id }}"></div>
   <p class="small muted" x-show="mode == ''">{{ t('accept_edit_hint') if g.edit else t('accept_will_fix_hint') }}</p>
   <p class="small muted" x-show="mode == 'edit'" x-cloak>{{ t('edit_hint') }}</p>
   <form x-show="mode == 'edit'" hx-post="/p/{{ slug }}/s/{{ sid }}/decide" hx-target="#g-{{ g.id }}" hx-swap="outerHTML" class="stack">

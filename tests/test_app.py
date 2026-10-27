@@ -170,3 +170,50 @@ def test_review_card_buttons_post_to_the_section_url(client, fake, monkeypatch):
     assert card.status_code == 200 and "editado" in card.text
     assert "R$ 1 bilhão por ano" in store.load(slug).read_section(sid)
     assert "o revisor não propôs um texto" in page  # the buttons explain themselves
+
+
+def test_agree_and_fix_with_ai(client, fake, monkeypatch):
+    """'Concordo (corrigir com IA)': the AI rewrites the flagged passage, the author sees the diff and accepts,
+    and the finding is marked edited."""
+    cfg = config.load()
+    cfg.provider = "ollama"
+    config.save(cfg)
+    provider = fake(
+        replies={"Corrija o problema apontado pela revisão": {
+            "edits": [{"find": "cerca de um bilhão", "replace": "cerca de R$ 1 bilhão (acordos 2026-2028)",
+                       "justificativa": "diz a que se refere o valor"}], "notas": "ok"}},
+        default={"parecer": "revisar", "findings": [
+            {"excerpt": "cerca de um bilhão", "rotulo": "Clareza", "prioridade": "média", "descricao": "Vago.",
+             "acao_sugerida": "Diga a que se refere o valor."}]})
+    monkeypatch.setattr(registry, "build", lambda *a, **k: provider)
+    slug = client.post("/projects/new", data={"title": "IA corrige", "lang": "pt_BR", "structure": "imrad"}
+                       ).headers["HX-Redirect"].split("/")[2]
+    sid = store.load(slug).sections[1].id
+    client.post(f"/p/{slug}/s/{sid}/save", data={"text": "O acordo custa cerca de um bilhão por ano."})
+    wait_job(client, client.post(f"/p/{slug}/s/{sid}/review", data={}).text)
+    page = client.get(f"/p/{slug}/s/{sid}").text
+    assert "Concordo (corrigir com IA)" in page
+    url = re.search(r'hx-post="([^"]*/fix)"', page).group(1)
+    gid = re.search(r'id="g-(G1-\d+)"', page).group(1)
+
+    nxt = wait_job(client, client.post(url, data={"number": 1, "group": gid}).text)
+    assert nxt.startswith("/proposals/")
+    prop_page = client.get(nxt).text
+    assert f"Correção do apontamento {gid}" in prop_page and "<ins>" in prop_page
+    assert "Diga a que se refere o valor" in provider.prompts[-1]  # the finding goes to the model
+    client.post(nxt + "/accept")
+    assert "R$ 1 bilhão (acordos 2026-2028)" in store.load(slug).read_section(sid)
+    assert re.search(rf'id="g-{gid}"[^>]*>.*?editado', client.get(f"/p/{slug}/s/{sid}").text, re.S)
+
+
+def test_ai_fix_button_hidden_without_ai(client, fake, monkeypatch):
+    provider = fake(default={"parecer": "revisar", "findings": [
+        {"excerpt": "um bilhão", "rotulo": "Clareza", "prioridade": "média", "descricao": "Vago."}]})
+    monkeypatch.setattr(registry, "build", lambda *a, **k: provider)
+    slug = client.post("/projects/new", data={"title": "Sem IA", "lang": "pt_BR", "structure": "imrad"}
+                       ).headers["HX-Redirect"].split("/")[2]
+    sid = store.load(slug).sections[1].id
+    client.post(f"/p/{slug}/s/{sid}/save", data={"text": "Custa um bilhão."})
+    wait_job(client, client.post(f"/p/{slug}/s/{sid}/review", data={}).text)
+    page = client.get(f"/p/{slug}/s/{sid}").text
+    assert "Concordo (vou corrigir)" in page and "corrigir com IA" not in page

@@ -287,6 +287,8 @@ def decide(project: Project, section_id: str, number: int, group_id: str, action
         group["state"] = REJECTED
     elif action == "resolve":
         group["state"] = RESOLVED
+    elif action == "ai_fix":  # the AI's correction was accepted on the proposal page (text already written)
+        group["state"] = EDITED
     elif action == "defer":
         group["state"] = DEFERRED
     elif action == "reopen":

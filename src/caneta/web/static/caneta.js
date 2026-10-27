@@ -48,7 +48,7 @@ window.caneta = (function () {
 
   // one task per section: while one runs (#job .running), the action buttons stay disabled
   function syncBusy() {
-    const busy = !!document.querySelector("#job .job.running");
+    const busy = !!document.querySelector(".job.running");  // #job or a review card's own slot
     document.querySelectorAll(".tool button, .busy-lock").forEach((b) => { b.disabled = busy; });
     const note = document.getElementById("busy-note");
     if (note) note.hidden = !busy;
@@ -56,7 +56,7 @@ window.caneta = (function () {
   document.addEventListener("DOMContentLoaded", syncBusy);
   document.addEventListener("htmx:afterSettle", syncBusy);
   document.addEventListener("htmx:beforeRequest", (e) => {
-    const form = e.detail.elt && e.detail.elt.closest && e.detail.elt.closest(".tool");
+    const form = e.detail.elt && e.detail.elt.closest && e.detail.elt.closest(".tool, .busy-lock");
     if (form) document.querySelectorAll(".tool button, .busy-lock").forEach((b) => { b.disabled = true; });
   });
 

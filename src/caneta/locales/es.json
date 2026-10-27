@@ -256,5 +256,8 @@
  "edit_hint": "Abre un campo con el fragmento señalado: escribe tu versión y haz clic en “Aplicar mi texto” para reemplazarlo en el texto.",
  "reject_hint": "No estás de acuerdo: indica el motivo (queda registrado).",
  "defer_hint": "Lo deja para después, sin cambiar el texto.",
- "request_failed": "No se pudo completar la acción (error {status}). Recarga la página e inténtalo de nuevo."
+ "request_failed": "No se pudo completar la acción (error {status}). Recarga la página e inténtalo de nuevo.",
+ "accept_ai_fix": "De acuerdo (corregir con IA)",
+ "accept_ai_fix_hint": "La IA reescribe el fragmento para resolver la observación. Ves el cambio (diff) y lo aceptas o descartas; al aceptarlo, la observación queda como editada.",
+ "proposal_review_fix": "Corrección de la observación"
 }

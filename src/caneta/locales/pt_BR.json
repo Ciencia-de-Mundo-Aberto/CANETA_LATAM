@@ -256,5 +256,8 @@
  "edit_hint": "Abre um campo com o trecho apontado: escreva a sua versão e clique em “Aplicar meu texto” para substituí-lo no texto.",
  "reject_hint": "Discorda do apontamento: informe o motivo (fica registrado).",
  "defer_hint": "Deixa para depois, sem mudar o texto.",
- "request_failed": "Não foi possível concluir a ação (erro {status}). Recarregue a página e tente de novo."
+ "request_failed": "Não foi possível concluir a ação (erro {status}). Recarregue a página e tente de novo.",
+ "accept_ai_fix": "Concordo (corrigir com IA)",
+ "accept_ai_fix_hint": "A IA reescreve o trecho para resolver o apontamento. Você vê a mudança (diff) e aceita ou descarta; ao aceitar, o apontamento fica como editado.",
+ "proposal_review_fix": "Correção do apontamento"
 }

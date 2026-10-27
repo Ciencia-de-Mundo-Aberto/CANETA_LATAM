@@ -256,5 +256,8 @@
  "edit_hint": "Opens a field with the flagged passage: write your version and click “Apply my text” to replace it in the text.",
  "reject_hint": "You disagree: give the reason (it is recorded).",
  "defer_hint": "Leaves it for later, without changing the text.",
- "request_failed": "The action could not be completed (error {status}). Reload the page and try again."
+ "request_failed": "The action could not be completed (error {status}). Reload the page and try again.",
+ "accept_ai_fix": "Agree (fix with AI)",
+ "accept_ai_fix_hint": "The AI rewrites the passage to address the finding. You see the change (diff) and accept or discard it; once accepted, the finding is marked edited.",
+ "proposal_review_fix": "Fix for the review finding"
 }

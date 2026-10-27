@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>{{ t('proposal_' ~ prop.kind) }} — {{ sec.title }}</h1>
+<h1>{{ t('proposal_' ~ prop.kind) }}{% if prop.review %} {{ prop.review.group }}{% endif %} — {{ sec.title }}</h1>
 <p class="muted">{{ prop.provider }} {{ prop.model }} · {{ t('proposal_hint') }}</p>
 {% for w in prop.warnings %}<div class="notice warn">⚠ {{ w }}</div>{% endfor %}
 {% if prop.notes %}<div class="notice">{{ prop.notes }}</div>{% endif %}

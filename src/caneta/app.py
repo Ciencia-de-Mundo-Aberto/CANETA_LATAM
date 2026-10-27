@@ -341,6 +341,15 @@ def create_app(token: str | None = None) -> FastAPI:
 
         return job_response(request, jobs.start(title, work, key=section_key(slug, sid)))
 
+    @app.post("/p/{slug}/s/{sid}/fix", response_class=HTMLResponse)
+    def section_fix_finding(request: Request, slug: str, sid: str, number: int = Form(...), group: str = Form(...)):
+        """'Concordo (corrigir com IA)' on a review card: proposal → diff → the author accepts."""
+        proj = store.load(slug)
+        g = next((x for x in rounds.load_round(proj, sid, number)["groups"] if x["id"] == group), None)
+        if g is None:
+            return HTMLResponse("<div class='notice err'>apontamento não encontrado</div>", status_code=404)
+        return _proposal_job(request, slug, sid, "Correção do apontamento com IA", writing.fix_finding, g, number)
+
     @app.post("/p/{slug}/s/{sid}/polish", response_class=HTMLResponse)
     def section_polish(request: Request, slug: str, sid: str, extra: str = Form(""), text: str = Form(None)):
         return _proposal_job(request, slug, sid, "Formatar e polir", writing.polish, extra, text=text)
@@ -377,6 +386,8 @@ def create_app(token: str | None = None) -> FastAPI:
         proj = store.load(prop["slug"])
         sid = prop["section_id"]
         proj.write_section(sid, text if text is not None else prop["proposed"], f"ia {prop['kind']} aceita")
+        if prop.get("review"):  # a review finding fixed by the AI: the card shows it as edited
+            rounds.decide(proj, sid, prop["review"]["number"], prop["review"]["group"], "ai_fix")
         new_state = {"polish": "polished", "enrich": "enriched", "compare": "enriched"}.get(prop["kind"])
         if new_state and proj.section(sid).state in ("draft", "polished"):
             proj.set_state(sid, new_state)

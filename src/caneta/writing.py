@@ -34,6 +34,7 @@ class Proposal:
     edits: list[dict] = field(default_factory=list)
     provider: str = ""
     model: str = ""
+    review: dict | None = None  # {"number", "group"} when the proposal fixes a review finding
 
     def as_dict(self) -> dict:
         return self.__dict__.copy()
@@ -185,9 +186,27 @@ def interactive_edit(project: Project, section_id: str, provider: Provider, inst
     if dropped:
         warnings.append(f"{dropped} edição(ões) descartada(s): o trecho não aparecia exatamente uma vez no texto.")
     if not valid:
-        raise WritingError(str(data.get("notas") or "nenhuma edição aplicável foi proposta"))
+        notes = str(data.get("notas") or "").strip()
+        raise WritingError(f"A IA não propôs mudanças. Motivo dela: {notes}" if notes
+                           else "A IA não propôs nenhuma mudança aplicável.")
     return Proposal("edit", section_id, text, proposed, str(data.get("notas") or ""), warnings, valid,
                     provider=provider.name, model=provider.model)
+
+
+def fix_finding(project: Project, section_id: str, provider: Provider, finding: dict, number: int,
+                on_log=None) -> Proposal:
+    """'I agree, fix it for me': the AI rewrites the flagged passage to address a review finding that came
+    without a ready replacement. Same anchored edit + diff as an interactive edit; the author still accepts."""
+    instruction = (f"Corrija o problema apontado pela revisão ({finding.get('rotulo', '')}): "
+                   f"{finding.get('descricao', '')}")
+    if finding.get("acao_sugerida"):
+        instruction += f" Ação sugerida pelo revisor: {finding['acao_sugerida']}"
+    instruction += (" Mude só o necessário, no trecho selecionado ou logo ao redor dele; preserve as citações "
+                    "[@chave] e não invente dados, números nem referências.")
+    prop = interactive_edit(project, section_id, provider, instruction, finding.get("excerpt", ""), on_log=on_log)
+    prop.kind = "review_fix"
+    prop.review = {"number": number, "group": finding["id"]}
+    return prop
 
 
 def diff_html(before: str, after: str) -> str:
