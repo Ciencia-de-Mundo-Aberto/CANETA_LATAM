@@ -8,7 +8,7 @@
 set -eu
 
 REPO="https://github.com/LucaswasTaken/CANETA_LATAM"
-REF="${CANETA_REF:-v0.1.4}"
+REF="${CANETA_REF:-v0.1.5}"
 
 printf '\n  CANETA - Central de Assistência e Navegação para Escrita de Textos Avançados\n\n'
 

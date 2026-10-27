@@ -6,7 +6,7 @@
 
 $ErrorActionPreference = "Stop"
 $repo = "https://github.com/LucaswasTaken/CANETA_LATAM"
-$ref = if ($env:CANETA_REF) { $env:CANETA_REF } else { "v0.1.4" }
+$ref = if ($env:CANETA_REF) { $env:CANETA_REF } else { "v0.1.5" }
 
 Write-Host ""
 Write-Host "  CANETA - Central de Assistencia e Navegacao para Escrita de Textos Avancados" -ForegroundColor Green

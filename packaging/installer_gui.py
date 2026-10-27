@@ -23,7 +23,7 @@ from tkinter import scrolledtext, ttk
 
 BUNDLE = Path(getattr(sys, "_MEIPASS", Path(__file__).parent))
 REPO = "https://github.com/LucaswasTaken/CANETA_LATAM"
-REF = "v0.1.4"  # kept equal to the project version by scripts/build_release.py
+REF = "v0.1.5"  # kept equal to the project version by scripts/build_release.py
 NO_WINDOW = 0x08000000 if os.name == "nt" else 0
 BRAND, ACCENT = "#123c3a", "#f2c14e"
 
