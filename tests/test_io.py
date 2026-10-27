@@ -137,3 +137,45 @@ def test_journal_matching_ignores_markup_and_open_access_boilerplate():
     top = journals.match(text, k=5)
     assert all("Vortex" not in r["journal"] for r in top)
     assert any(r["area"] == "Ciencias_Sociais_Aplicadas" for r in top[:3])
+
+
+def test_liinc_is_indexed_with_its_templates():
+    from caneta import journals
+
+    row = next(r for r in journals.load_index() if r["issn"] == "1808-3536")
+    assert row["journal"] == "Liinc em Revista" and row["qualis_estrato"] == "A1"
+    files = [t["file"] for t in journals.template_sources(row["id"])]
+    assert "LIINC_Template_2025_v2.docx" in files
+    top = journals.match("Comunicação científica, acesso aberto, cientometria e políticas de informação na "
+                         "América Latina: produção e circulação do conhecimento.", k=5)
+    assert any(r["journal"] == "Liinc em Revista" for r in top)
+
+
+def test_fetch_template_retries_a_refused_download(tmp_path, monkeypatch):
+    import httpx
+
+    from caneta import journals
+
+    calls = []
+
+    class Flaky:
+        def __init__(self, *a, **k):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def get(self, url):
+            calls.append(url)
+            if len(calls) == 1:
+                raise httpx.ConnectError("refused")
+            return httpx.Response(200, content=b"PK\x03\x04docx")
+
+    monkeypatch.setattr(httpx, "Client", Flaky)
+    monkeypatch.setattr(journals.time if hasattr(journals, "time") else __import__("time"), "sleep", lambda s: None)
+    monkeypatch.setattr(journals, "template_sources", lambda jid: [{"file": "t.docx", "url": "https://x/t.docx"}])
+    saved = journals.fetch_template("any", tmp_path)
+    assert [p.name for p in saved] == ["t.docx"] and len(calls) == 2

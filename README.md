@@ -74,7 +74,7 @@ uv tool uninstall caneta
   - Nos **resultados e na discussão**, ela baixa o **texto completo** de trabalhos relacionados para comparar resultados e confere os números no original.
   - A IA **nunca** gera dados bibliográficos. Citações inventadas são removidas automaticamente.
 - **Escolha da revista.**
-  - A CANETA sugere as 5 revistas mais próximas do seu texto, entre 117 revistas Diamond (com Qualis 2021-2024, citações e escopo). Também dá para escolher qualquer outra.
+  - A CANETA sugere as 5 revistas mais próximas do seu texto, entre 118 revistas Diamond (com Qualis 2021-2024, citações e escopo). Também dá para escolher qualquer outra.
   - O template é baixado do site da própria revista.
   - Opcionalmente, a **busca por significado** (embeddings multilíngues locais, ≈0,5 GB, ativada em Configurações) melhora as sugestões entre português, espanhol e inglês.
 - **Exportação.**

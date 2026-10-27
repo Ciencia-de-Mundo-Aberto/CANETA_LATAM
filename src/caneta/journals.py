@@ -1,4 +1,4 @@
-"""Journal matching within the CANETA index: 117 Diamond OA journals (LATAM focus) with Qualis 2021-2024,
+"""Journal matching within the CANETA index: 118 Diamond OA journals (LATAM focus) with Qualis 2021-2024,
 OpenAlex 2-year citedness, scope and themes.
 
 Ranking: TF-IDF cosine (pure Python) between the manuscript (title + abstract + keywords + intro) and each
@@ -153,29 +153,43 @@ def template_sources(journal_id: str) -> list[dict]:
     return templates_map().get(journal_id, [])
 
 
-def fetch_template(journal_id: str, dest_dir: Path) -> list[Path]:
-    """Download the journal's own template files (from its site) into dest_dir."""
+def _template_ok(name: str, status: int, content: bytes) -> bool:
+    is_html = content.lstrip()[:15].lower().startswith((b"<!doctype", b"<html"))
+    is_office_or_zip = content[:4] in (b"PK\x03\x04", b"\xd0\xcf\x11\xe0")
+    is_tex = name.lower().endswith((".tex", ".cls", ".sty", ".bst"))
+    return status == 200 and not is_html and (is_office_or_zip or is_tex)
+
+
+def fetch_template(journal_id: str, dest_dir: Path, attempts: int = 3) -> list[Path]:
+    """Download the journal's own template files (from its site) into dest_dir. Journal servers (OJS) often
+    refuse one of several quick downloads, so each file is retried a few times with a pause."""
+    import time
+
     import httpx
 
     dest_dir.mkdir(parents=True, exist_ok=True)
     saved = []
-    for item in template_sources(journal_id):
-        url, name = item.get("url"), Path(item.get("file", "template")).name
-        if not url or not url.startswith(("http://", "https://")):
-            continue
-        target = dest_dir / name
-        if target.exists():
-            saved.append(target)
-            continue
-        try:
-            r = httpx.get(url, follow_redirects=True, timeout=60,
-                          headers={"User-Agent": "Mozilla/5.0 (compatible; CANETA/0.1)"})
-        except httpx.HTTPError:
-            continue
-        is_html = r.content.lstrip()[:15].lower().startswith((b"<!doctype", b"<html"))
-        is_office_or_zip = r.content[:4] in (b"PK\x03\x04", b"\xd0\xcf\x11\xe0")
-        is_tex = name.lower().endswith((".tex", ".cls", ".sty", ".bst"))
-        if r.status_code == 200 and not is_html and (is_office_or_zip or is_tex):
-            target.write_bytes(r.content)
-            saved.append(target)
+    with httpx.Client(follow_redirects=True, timeout=60,
+                      headers={"User-Agent": "Mozilla/5.0 (compatible; CANETA/0.1)"}) as client:
+        for item in template_sources(journal_id):
+            url, name = item.get("url"), Path(item.get("file", "template")).name
+            if not url or not url.startswith(("http://", "https://")):
+                continue
+            target = dest_dir / name
+            if target.exists():
+                saved.append(target)
+                continue
+            for attempt in range(attempts):
+                if attempt:
+                    time.sleep(1.5 * attempt)
+                try:
+                    r = client.get(url)
+                except httpx.HTTPError:
+                    continue
+                if _template_ok(name, r.status_code, r.content):
+                    target.write_bytes(r.content)
+                    saved.append(target)
+                    break
+                if r.status_code == 404:  # gone for good: no point retrying
+                    break
     return saved
