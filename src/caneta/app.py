@@ -15,6 +15,7 @@ from fastapi.templating import Jinja2Templates
 
 from . import (
     __version__,
+    authors,
     checkpoint,
     config,
     discovery,
@@ -517,11 +518,65 @@ def create_app(token: str | None = None) -> FastAPI:
 
         return job_response(request, jobs.start("Template da revista", work))
 
+    # ------------------------------------------------------------------ authors and affiliations
+    def authors_render(request: Request, proj, rows=None, msg: str = "", err: bool = False):
+        rows = authors.get(proj) if rows is None else rows
+        blind = authors.blind(proj)
+        return render(request, "authors.html", proj=proj, people=rows or [dict(authors.BLANK)], blind=blind,
+                      leaks=authors.leaks(proj) if blind else [], msg=msg, msg_err=err,
+                      has_source=(proj.path / "material" / "latex-source").is_dir())
+
+    @app.get("/p/{slug}/authors", response_class=HTMLResponse)
+    def authors_page(request: Request, slug: str):
+        return authors_render(request, store.load(slug))
+
+    @app.post("/p/{slug}/authors", response_class=HTMLResponse)
+    async def authors_save(request: Request, slug: str):
+        """One form, several buttons (save, add, remove:i, up:i, orcid:i, collect)."""
+        proj = store.load(slug)
+        form = await request.form()
+        tr = i18n.translator(config.load().lang)
+        cols = {k: form.getlist(k) for k in ("name", "affiliation", "email", "orcid")}
+        corr = form.get("corresponding")
+        rows = [{k: str(cols[k][i]).strip() if i < len(cols[k]) else "" for k in cols} | {"corresponding": str(i) == corr}
+                for i in range(len(cols["name"]))]
+        verb, _, arg = str(form.get("action") or "save").partition(":")
+        idx = int(arg) if arg.isdigit() and int(arg) < len(rows) else None
+        msg, err = tr("authors_saved"), False
+        if verb == "add":
+            rows.append(dict(authors.BLANK))
+        elif verb == "remove" and idx is not None:
+            rows.pop(idx)
+        elif verb == "up" and idx:
+            rows[idx - 1], rows[idx] = rows[idx], rows[idx - 1]
+        elif verb == "orcid" and idx is not None:
+            try:
+                found = authors.from_orcid(rows[idx]["orcid"])
+                for k in ("name", "affiliation", "email"):
+                    rows[idx][k] = rows[idx][k] or found[k]
+                rows[idx]["orcid"] = found["orcid"]
+                msg = tr("authors_orcid_ok", name=found["name"] or found["orcid"])
+            except ValueError:
+                msg, err = tr("authors_orcid_invalid"), True
+            except Exception:  # noqa: BLE001 - offline / ORCID unavailable
+                msg, err = tr("authors_orcid_failed"), True
+        elif verb == "collect":
+            found = authors.from_project_source(proj)
+            rows = authors.merge(authors.normalize(rows), found)
+            msg, err = (tr("authors_collected", n=len(found)), False) if found else (tr("authors_collect_none"), True)
+        for r in rows:
+            r["orcid"] = authors.valid_orcid(r["orcid"]) or r["orcid"]
+        proj.data["authors"] = authors.normalize(rows)
+        proj.data["blind"] = bool(form.get("blind"))
+        proj.save()
+        proj.log("authors_saved", authors=len(proj.data["authors"]), blind=proj.data["blind"], action=verb)
+        return authors_render(request, proj, rows, msg, err)  # rows: keeps a blank row just added
+
     # ------------------------------------------------------------------ export / checkpoint / log
     @app.get("/p/{slug}/export", response_class=HTMLResponse)
     def export_page(request: Request, slug: str):
         proj = store.load(slug)
-        return render(request, "export.html", proj=proj, has_tex=bool(shutil.which("tectonic") or shutil.which("xelatex")),
+        return render(request, "export.html", proj=proj, people=authors.get(proj), has_tex=bool(shutil.which("tectonic") or shutil.which("xelatex")),
                       templates=[p.name for p in (proj.path / "templates").glob("*")] if (proj.path / "templates").is_dir()
                       else [])
 

@@ -217,3 +217,27 @@ def test_ai_fix_button_hidden_without_ai(client, fake, monkeypatch):
     wait_job(client, client.post(f"/p/{slug}/s/{sid}/review", data={}).text)
     page = client.get(f"/p/{slug}/s/{sid}").text
     assert "Concordo (vou corrigir)" in page and "corrigir com IA" not in page
+
+
+def test_authors_page_add_save_reorder_blind(client):
+    proj = store.create("Com autores", lang="pt_BR", mode="A", structure="empty")
+    proj.add_section("Introdução", None, "Texto de Ana Silva.\n")
+    base = f"/p/{proj.slug}/authors"
+    page = client.get(base)
+    assert page.status_code == 200 and 'name="name"' in page.text
+    r = client.post(base, data={"name": ["Ana Silva"], "affiliation": ["UFS"], "email": ["ana@ufs.br"],
+                                "orcid": ["https://orcid.org/0000-0002-1825-0097"], "action": "add"})
+    assert r.text.count('name="name"') == 2  # the blank row just added
+    r = client.post(base, data={"name": ["Ana Silva", "Bruno Lima"], "affiliation": ["UFS", "UNAM"],
+                                "email": ["ana@ufs.br", ""], "orcid": ["0000-0002-1825-0097", ""],
+                                "corresponding": "0", "action": "up:1"})
+    saved = store.load(proj.slug).data["authors"]
+    assert [a["name"] for a in saved] == ["Bruno Lima", "Ana Silva"] and saved[1]["corresponding"]
+    assert saved[1]["orcid"] == "0000-0002-1825-0097"
+    r = client.post(base, data={"name": ["Bruno Lima", "Ana Silva"], "affiliation": ["UNAM", "UFS"],
+                                "email": ["", "ana@ufs.br"], "orcid": ["", ""], "blind": "1", "action": "save"})
+    assert store.load(proj.slug).data["blind"] and "Ana Silva" in r.text and "Introdução" in r.text  # leak shown
+    assert "folha de rosto" in client.get(f"/p/{proj.slug}/export").text
+    r = client.post(base, data={"name": ["Bruno Lima"], "affiliation": [""], "email": [""], "orcid": ["123"],
+                                "action": "orcid:0"})
+    assert "ORCID inválido" in r.text

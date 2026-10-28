@@ -46,7 +46,7 @@ def _latex_zip(tmp_path):
 def test_import_latex_zip_project(tmp_path):
     proj = manuscript_import.import_article(_latex_zip(tmp_path))
     assert proj.title == "Hidroides do Nordeste"
-    assert proj.data["authors"] == ["Ana Souza", "Bruno Lima"]
+    assert [a["name"] for a in proj.data["authors"]] == ["Ana Souza", "Bruno Lima"]
     kinds = [s.kind for s in proj.sections]
     assert kinds[0] == "abstract" and "Sergipe" in proj.read_section(proj.sections[0].id)
     titles = [s.title for s in proj.sections]

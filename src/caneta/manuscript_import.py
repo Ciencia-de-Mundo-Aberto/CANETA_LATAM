@@ -20,7 +20,7 @@ from pathlib import Path
 
 import yaml
 
-from . import ingest, references
+from . import authors, ingest, latex_figures, references
 from . import project as store
 
 HEADING = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
@@ -80,9 +80,7 @@ def to_markdown(path: Path, fig_dir: Path | None = None, log=None) -> tuple[dict
 
     source, prepared, tex = path, None, ""
     if fmt == "latex" and fig_dir is not None:
-        from . import latex_figures
-
-        tex = latex_figures.inline_inputs(path.read_text(encoding="utf-8", errors="replace"), path.parent)
+        tex =latex_figures.inline_inputs(path.read_text(encoding="utf-8", errors="replace"), path.parent)
         tex, _ = latex_figures.convert_figures(tex, fig_dir, log=log)
         prepared = path.parent / f"_caneta_{path.stem}.tex"  # next to the original: relative images still resolve
         prepared.write_text(tex, encoding="utf-8")
@@ -183,9 +181,13 @@ def import_article(path: Path, lang: str = "pt_BR", title: str | None = None) ->
             (proj.path / "figures").mkdir(exist_ok=True)
             for png in figures:
                 shutil.copy2(png, proj.path / "figures" / png.name)
-        authors = meta.get("author")
-        if authors:
-            proj.data["authors"] = [_flat(a) for a in (authors if isinstance(authors, list) else [authors])]
+        names = meta.get("author")
+        people = [_flat(a) for a in (names if isinstance(names, list) else [names])] if names else []
+        if source.suffix.lower() == ".tex":  # LaTeX also says affiliations, e-mails and ORCID iDs
+            tex = latex_figures.inline_inputs(source.read_text(encoding="utf-8", errors="replace"), source.parent)
+            people = authors.from_latex(tex) or people
+        if people:
+            proj.data["authors"] = authors.normalize(people)
             proj.save()
         abstract = _flat(meta.get("abstract"))
         if abstract and not any(p.title == "Abertura" for p in parts):

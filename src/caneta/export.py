@@ -18,7 +18,7 @@ from pathlib import Path
 
 import yaml
 
-from . import references
+from . import authors, references
 from .project import Project
 
 CSL_DIR = Path(__file__).parent / "data" / "csl"
@@ -49,17 +49,20 @@ def _sections(project: Project, only_approved: bool):
         yield s, project.read_section(s.id).strip()
 
 
-def _meta(project: Project, abstract: str | None = None) -> dict:
+AUTHOR_META = {"plain": authors.plain_meta, "word": authors.word_meta, "latex": authors.latex_meta}
+
+
+def _meta(project: Project, abstract: str | None = None, authors_as: str = "plain") -> dict:
+    """Title, language, authors (as Word / LaTeX want them; none when the review is double-blind)."""
     meta = {"title": project.title, "lang": project.lang.replace("_", "-")}
-    if project.data.get("authors"):
-        meta["author"] = project.data["authors"]
+    meta.update(AUTHOR_META[authors_as](project))
     if abstract:
         meta["abstract"] = abstract
     return meta
 
 
 def manuscript_markdown(project: Project, only_approved: bool = False, abstract_in_meta: bool = False,
-                        layout: bool = False, refs_block: bool = False) -> str:
+                        layout: bool = False, refs_block: bool = False, authors_as: str = "plain") -> str:
     """The whole manuscript as Markdown with a YAML header. With abstract_in_meta the abstract
     sections go to the metadata (LaTeX templates typeset it with the abstract environment).
 
@@ -94,7 +97,8 @@ def manuscript_markdown(project: Project, only_approved: bool = False, abstract_
         text = text.rstrip() + f"\n\n# {title} {{.unnumbered}}\n\n::: {{#refs}}\n:::\n"
     if appendix:
         text = text.rstrip() + "\n\n" + "\n\n".join(appendix)
-    header = yaml.safe_dump(_meta(project, "\n\n".join(abstract) or None), allow_unicode=True, sort_keys=False)
+    header = yaml.safe_dump(_meta(project, "\n\n".join(abstract) or None, authors_as), allow_unicode=True,
+                            sort_keys=False)
     return f"---\n{header}---\n\n" + text
 
 
@@ -401,8 +405,8 @@ def export_latex(project: Project, only_approved: bool = False) -> Path:
         if figures.is_dir():  # images the manuscript shows (converted TikZ drawings...) go with the .tex
             shutil.copytree(figures, (main.parent if main else work) / "figures", dirs_exist_ok=True)
         if main is None:  # generic article (pandoc template) with natbib + references.bib
-            md = manuscript_markdown(project, only_approved, abstract_in_meta=True, layout=True)
-            extra = ["--standalone", "--natbib", "--wrap=preserve", f"--lua-filter={TABLE_FILTER}"]
+            md = manuscript_markdown(project, only_approved, abstract_in_meta=True, layout=True, authors_as="latex")
+            extra =["--standalone", "--natbib", "--wrap=preserve", f"--lua-filter={TABLE_FILTER}"]
             if "--number-sections" in _layout_args(project, md):
                 extra.append("--number-sections")
             if refs:
@@ -441,11 +445,12 @@ def _fill_template(project: Project, main: Path, only_approved: bool, has_refs: 
     head, n = replace_command_arg(head, TITLE_CMDS, title)
     if not n:
         head = head.replace("\\begin{document}", f"\\title{{{title}}}\n\\begin{{document}}", 1)
-    authors = project.data.get("authors") or []
+    people = authors.get(project)
     # only a single plain \author{A \and B}; structured ones (\authorinfo, affiliations) are the author's to fill
-    if authors and len(re.findall(r"\\author\s*[\[{]", head)) == 1 and re.search(
+    if (people or authors.blind(project)) and len(re.findall(r"\\author\s*[\[{]", head)) == 1 and re.search(
             r"\\author\s*\{[^\\{}]*(?:\\and\b[^\\{}]*)*\}", head):
-        head, _ = replace_command_arg(head, "author", " \\and ".join(_escape_tex(a) for a in authors))
+        value = "" if authors.blind(project) else " \\and ".join(authors.latex_author(a, project.lang) for a in people)
+        head, _ = replace_command_arg(head, "author", value)
 
     abstract_md = "\n\n".join(text for s, text in _sections(project, only_approved) if s.kind == "abstract")
     abstract = _tex(abstract_md, cite_flag).strip() if abstract_md else ""
@@ -503,8 +508,16 @@ def export(project: Project, fmt: str, only_approved: bool = False) -> Path:
     if fmt in ("tex", "latex"):
         return export_latex(project, only_approved)
     cite_args = (["--citeproc", f"--bibliography={refs_file}"] + _csl(project)) if refs else []
+    if fmt == "titlepage":  # double-blind: the authors go in a file of their own
+        if not authors.get(project):
+            raise ExportError("nenhum autor cadastrado — preencha a página Autores")
+        target = out_dir / f"{project.slug}-folha-de-rosto.docx"
+        pypandoc.convert_text(authors.title_page_markdown(project), "docx", format="markdown",
+                              outputfile=str(target), extra_args=_reference_doc(project))
+        return target
     if fmt in ("docx", "pdf"):
-        md = manuscript_markdown(project, only_approved, abstract_in_meta=True, layout=True, refs_block=True)
+        md = manuscript_markdown(project, only_approved, abstract_in_meta=True, layout=True, refs_block=True,
+                                 authors_as="word" if fmt == "docx" else "latex")
         layout = _layout_args(project, md)
     if fmt == "docx":
         target = base.with_suffix(".docx")

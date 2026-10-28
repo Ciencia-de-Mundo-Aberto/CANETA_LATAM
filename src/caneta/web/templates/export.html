@@ -3,6 +3,7 @@
 <h1>{{ t('export_title') }}</h1>
 {% set done = proj.sections | selectattr('state', 'equalto', 'approved') | list | length %}
 <p>{{ t('export_progress', done=done, total=proj.sections|length) }}</p>
+<p>👥 {% if proj.data.get('blind') %}{{ t('export_authors_blind') }} <a href="/p/{{ proj.slug }}/export/titlepage">{{ t('authors_titlepage') }}</a>{% elif people %}{{ t('export_authors_ok', names=people | map(attribute='name') | join(', ')) }}{% else %}<span class="warn">{{ t('export_authors_none') }}</span>{% endif %} · <a href="/p/{{ proj.slug }}/authors">{{ t('edit') }}</a></p>
 {% if proj.journal %}<p>{{ t('current_journal') }}: <strong>{{ proj.journal.name }}</strong>{% if templates %} · {{ t('template_files') }}: {{ templates | join(', ') }}{% endif %}</p>{% endif %}
 
 <form class="row" hx-post="/p/{{ proj.slug }}/csl" hx-trigger="change">

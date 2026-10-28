@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>👥 {{ t('authors_title') }}</h1>
+<p>{{ t('authors_intro') }}</p>
+{% if msg %}<p class="notice {{ 'err' if msg_err else 'ok' }}">{{ msg }}</p>{% endif %}
+
+<form method="post" action="/p/{{ proj.slug }}/authors">
+  <label class="notice warn" style="display:block">
+    <input type="checkbox" name="blind" value="1" {{ 'checked' if blind }}> <strong>{{ t('authors_blind') }}</strong>
+    <br><span class="small">{{ t('authors_blind_hint') }}</span>
+  </label>
+
+  <table class="list">
+    <tr><th>#</th><th>{{ t('author_name') }}</th><th>{{ t('author_affiliation') }}</th><th>{{ t('author_email') }}</th>
+        <th>ORCID</th><th title="{{ t('author_corresponding_hint') }}">✉ {{ t('author_corresponding') }}</th><th></th></tr>
+    {% for a in people %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td><input name="name" value="{{ a.name }}" placeholder="Ana Silva"></td>
+      <td><textarea name="affiliation" rows="2" placeholder="{{ t('author_affiliation_ph') }}">{{ a.affiliation }}</textarea></td>
+      <td><input name="email" type="email" value="{{ a.email }}" placeholder="ana@ufs.br"></td>
+      <td><input name="orcid" value="{{ a.orcid }}" size="19" placeholder="0000-0000-0000-0000">
+          <button name="action" value="orcid:{{ loop.index0 }}" class="ghost small" title="{{ t('author_orcid_hint') }}">↻ ORCID</button></td>
+      <td><input type="radio" name="corresponding" value="{{ loop.index0 }}" {{ 'checked' if a.corresponding }}></td>
+      <td><button name="action" value="up:{{ loop.index0 }}" class="ghost small" title="{{ t('author_up') }}" {{ 'disabled' if loop.first }}>↑</button>
+          <button name="action" value="remove:{{ loop.index0 }}" class="ghost small" title="{{ t('author_remove') }}">✕</button></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p class="small muted">{{ t('author_affiliation_tip') }}</p>
+
+  <div class="row">
+    <button name="action" value="save" class="primary">{{ t('save') }}</button>
+    <button name="action" value="add">+ {{ t('author_add') }}</button>
+    {% if has_source %}<button name="action" value="collect" title="{{ t('authors_collect_hint') }}">📥 {{ t('authors_collect') }}</button>{% endif %}
+  </div>
+</form>
+
+{% if blind %}
+<h2>{{ t('authors_blind_check') }}</h2>
+{% if leaks %}
+<div class="notice warn"><p>{{ t('authors_leaks') }}</p>
+  <ul>{% for sec, what in leaks %}<li><strong>{{ sec }}</strong>: “{{ what }}”</li>{% endfor %}</ul></div>
+{% else %}
+<p class="notice ok">{{ t('authors_no_leaks') }}</p>
+{% endif %}
+{% if people %}<p><a class="button" href="/p/{{ proj.slug }}/export/titlepage">📄 {{ t('authors_titlepage') }}</a></p>{% endif %}
+{% endif %}
+<p class="small muted">{{ t('authors_where') }}</p>
+{% endblock %}
