@@ -1,6 +1,6 @@
 [project]
 name = "caneta"
-version = "0.1.6"
+version = "0.1.7"
 description = "CANETA — Central de Assistência e Navegação para Escrita de Textos Avançados: assistente aberto de escrita científica, seção por seção, focado em revistas Diamond Open Access da América Latina."
 readme = "README.md"
 license = "AGPL-3.0-or-later"

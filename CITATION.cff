@@ -8,8 +8,8 @@ type: software
 authors:
   - name: "CANETA contributors"
 license: AGPL-3.0-or-later
-version: 0.1.6
-date-released: 2026-10-27
+version: 0.1.7
+date-released: 2026-10-28
 keywords:
   - diamond open access
   - scientific writing
