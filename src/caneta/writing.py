@@ -69,7 +69,23 @@ def _ground(project: Project, original: str, proposed: str) -> tuple[str, list[s
     if lost:
         warnings.append("A proposta removeu citações que existiam: " + ", ".join("@" + k for k in lost)
                         + ". Confira antes de aceitar.")
+    gone = _structure_lost(original, proposed)
+    if gone:
+        warnings.append("A proposta removeu elementos de estrutura: " + "; ".join(gone)
+                        + ". Recoloque-os ao ajustar o texto final, ou descarte a proposta.")
     return proposed.strip() + "\n", warnings
+
+
+def _structure_lost(original: str, proposed: str) -> list[str]:
+    """Subheadings, cross-references and figures present before but not after (AI rewrites drop them)."""
+    def heads(t: str) -> list[str]:
+        return [re.sub(r"\s*\{[^}]*\}\s*$", "", h).strip() for h in re.findall(r"^#{2,6} (.+)$", t, re.M)]
+
+    out = [f"subtítulo “{h}”" for h in heads(original) if h not in heads(proposed)]
+    out += [f"\\ref{{{r}}}" for r in dict.fromkeys(re.findall(r"\\ref\{([^}]+)\}", original))
+            if f"\\ref{{{r}}}" not in proposed]
+    out += [f"figura {f}" for f in re.findall(r"\{#(fig:[^\s}]+)", original) if f"#{f}" not in proposed]
+    return out
 
 
 def polish(project: Project, section_id: str, provider: Provider, extra: str = "", on_log=None) -> Proposal:

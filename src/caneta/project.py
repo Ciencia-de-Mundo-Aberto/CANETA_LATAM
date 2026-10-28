@@ -69,9 +69,13 @@ class Section:
     kind: str
     state: str
     file: str
+    label: str = ""  # cross-reference label (\label{sec:x} in an imported LaTeX source), so \ref{sec:x} resolves
 
     def as_dict(self) -> dict:
-        return {"id": self.id, "title": self.title, "kind": self.kind, "state": self.state, "file": self.file}
+        d = {"id": self.id, "title": self.title, "kind": self.kind, "state": self.state, "file": self.file}
+        if self.label:
+            d["label"] = self.label
+        return d
 
 
 class Project:
@@ -199,13 +203,14 @@ class Project:
         self._set_sections(sections)
         self.log("section_state", section=section_id, state=state, previous=old)
 
-    def add_section(self, title: str, kind: str | None = None, text: str = "", position: int | None = None) -> Section:
+    def add_section(self, title: str, kind: str | None = None, text: str = "", position: int | None = None,
+                    label: str = "") -> Section:
         title = title.strip() or "Nova seção"
         kind = kind if kind in KINDS else guess_kind(title)
         sections = self.sections
         sid = f"s{secrets.token_hex(3)}"
         file = f"sections/{sid}-{slugify(title)}.md"
-        sec = Section(id=sid, title=title, kind=kind, state="draft", file=file)
+        sec = Section(id=sid, title=title, kind=kind, state="draft", file=file, label=label)
         atomic_write(self.path / file, text)
         if position is None or position >= len(sections):
             sections.append(sec)

@@ -41,6 +41,7 @@ class ImportError_(Exception):
 class Part:
     title: str
     body: str
+    label: str = ""  # {#sec:x} of the heading: \label{sec:x} in LaTeX, kept so \ref{sec:x} resolves on export
 
 
 # ------------------------------------------------------------------ conversion
@@ -67,8 +68,9 @@ def _flat(value) -> str:
     return str(value).strip()
 
 
-def to_markdown(path: Path) -> tuple[dict, str]:
-    """(metadata: title/author/abstract, markdown body)."""
+def to_markdown(path: Path, fig_dir: Path | None = None, log=None) -> tuple[dict, str]:
+    """(metadata: title/author/abstract, markdown body). For LaTeX, figures drawn with TikZ are first
+    turned into images in fig_dir (see latex_figures), since pandoc would drop them."""
     fmt = FORMATS.get(path.suffix.lower())
     if not fmt:
         raise ImportError_(f"formato não suportado: {path.suffix} (use .docx, .odt, .tex, .md ou um .zip LaTeX)")
@@ -76,10 +78,28 @@ def to_markdown(path: Path) -> tuple[dict, str]:
         return _split_front_matter(path.read_text(encoding="utf-8", errors="replace"))
     import pypandoc
 
-    out = pypandoc.convert_file(str(path), MD_OUT, format=fmt, extra_args=["--wrap=none", "--standalone"],
-                                cworkdir=str(path.parent))  # so \input{chapter} resolves next to the main file
+    source, prepared, tex = path, None, ""
+    if fmt == "latex" and fig_dir is not None:
+        from . import latex_figures
+
+        tex = latex_figures.inline_inputs(path.read_text(encoding="utf-8", errors="replace"), path.parent)
+        tex, _ = latex_figures.convert_figures(tex, fig_dir, log=log)
+        prepared = path.parent / f"_caneta_{path.stem}.tex"  # next to the original: relative images still resolve
+        prepared.write_text(tex, encoding="utf-8")
+        source = prepared
+    try:
+        out = pypandoc.convert_file(str(source), MD_OUT, format=fmt, extra_args=["--wrap=none", "--standalone"],
+                                    cworkdir=str(path.parent))  # so \input{chapter} resolves next to the main file
+    finally:
+        if prepared is not None:
+            prepared.unlink(missing_ok=True)
     meta, body = _split_front_matter(out.replace("\r\n", "\n"))
     body = PANDOC_REF.sub(lambda m: f"\\{m.group(1)}{{{m.group(2)}}}", body)
+    if tex:
+        from .export import label_tables
+
+        body = label_tables(body, tex)  # pandoc keeps table captions but drops their \label
+        body = body.replace('width="\\\\linewidth"', 'width="100%"')  # LaTeX-only width → one Word also reads
     return meta, body
 
 
@@ -110,7 +130,9 @@ def split(md: str) -> tuple[str | None, list[Part]]:
             in_code = not in_code
         m = None if in_code else HEADING.match(line)
         if m:
-            heads.append((i, len(m.group(1)), re.sub(r"\*\*|__|\{[^}]*\}", "", m.group(2)).strip()))
+            ident = re.search(r"\{#([^\s}]+)", m.group(2))
+            heads.append((i, len(m.group(1)), re.sub(r"\*\*|__|\{[^}]*\}", "", m.group(2)).strip(),
+                          ident.group(1) if ident else ""))
     if not heads:
         return None, [Part("Texto", md.strip())] if md.strip() else []
     levels = sorted({h[1] for h in heads})
@@ -121,15 +143,15 @@ def split(md: str) -> tuple[str | None, list[Part]]:
     else:
         main = levels[0]
     parts = []
-    first_main = next((i for i, lv, _ in heads if lv == main), len(lines))
+    first_main = next((i for i, lv, _, _ in heads if lv == main), len(lines))
     pre = "\n".join(line for line in lines[:first_main] if not (HEADING.match(line) and title and title in line)).strip()
     if pre:
         parts.append(Part("Abertura", pre))
-    for k, (i, level, t) in enumerate(heads):
+    for k, (i, level, t, label) in enumerate(heads):
         if level != main:
             continue
-        end = next((n for n, lv, _ in heads[k + 1:] if lv <= main), len(lines))
-        parts.append(Part(t, "\n".join(lines[i + 1:end]).strip("\n")))
+        end = next((n for n, lv, _, _ in heads[k + 1:] if lv <= main), len(lines))
+        parts.append(Part(t, "\n".join(lines[i + 1:end]).strip("\n"), label))
     return title, parts
 
 
@@ -141,6 +163,7 @@ def import_article(path: Path, lang: str = "pt_BR", title: str | None = None) ->
     path = Path(path)
     staging = None
     bibs: list[Path] = []
+    fig_dir = Path(tempfile.mkdtemp(prefix="caneta-figs-"))
     try:
         if path.suffix.lower() == ".zip":
             staging = Path(tempfile.mkdtemp(prefix="caneta-latex-"))
@@ -150,10 +173,16 @@ def import_article(path: Path, lang: str = "pt_BR", title: str | None = None) ->
         else:
             source = path
             bibs = sorted(p for p in path.parent.glob("*.bib")) if path.suffix.lower() == ".tex" else []
-        meta, md = to_markdown(source)
+        meta, md = to_markdown(source, fig_dir)
+        figures = sorted(fig_dir.glob("*.png"))
+        md = md.replace(fig_dir.resolve().as_posix() + "/", "figures/")  # images live in <project>/figures
         doc_title, parts = split(md)
         name = title or _flat(meta.get("title")) or doc_title or path.stem
         proj = store.create(name, lang=lang, mode="A", structure="empty")
+        if figures:
+            (proj.path / "figures").mkdir(exist_ok=True)
+            for png in figures:
+                shutil.copy2(png, proj.path / "figures" / png.name)
         authors = meta.get("author")
         if authors:
             proj.data["authors"] = [_flat(a) for a in (authors if isinstance(authors, list) else [authors])]
@@ -167,16 +196,17 @@ def import_article(path: Path, lang: str = "pt_BR", title: str | None = None) ->
                 proj.add_section(ABSTRACT_TITLE.get(lang, "Resumo") if len(body) < 3000 else "Abertura",
                                  "abstract" if len(body) < 3000 else None, body + "\n")
             else:
-                proj.add_section(part.title, None, part.body + "\n")
+                proj.add_section(part.title, None, part.body + "\n", label=part.label)
         added = _import_bibs(proj, bibs)
         if staging is not None:
             shutil.copytree(staging, proj.path / "material" / "latex-source", dirs_exist_ok=True)
         proj.log("article_imported", source=path.name, sections=len(proj.sections), references=len(added),
-                 main_tex=source.name if staging else None)
+                 main_tex=source.name if staging else None, figures=[p.name for p in figures])
         return proj
     finally:
         if staging is not None:
             shutil.rmtree(staging, ignore_errors=True)
+        shutil.rmtree(fig_dir, ignore_errors=True)
 
 
 def _import_bibs(proj: store.Project, bibs: list[Path]) -> list[str]:
