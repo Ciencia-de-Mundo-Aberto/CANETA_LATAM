@@ -1,14 +1,14 @@
 #!/bin/sh
 # CANETA - instalador para Linux (e macOS pelo terminal)
 #   Na pasta de release:  sh install.sh
-#   Pela internet:        curl -LsSf https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.sh | sh
+#   Pela internet:        curl -LsSf https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.sh | sh
 # Instala o uv (que traz o próprio Python), baixa a CANETA do GitHub e abre o app.
 # Opções: CANETA_SEMANTIC=1 (busca por significado); CANETA_OCR=1; CANETA_REF=main (ou outra tag/branch);
 # CANETA_SOURCE=pasta local do código.
 set -eu
 
-REPO="https://github.com/LucaswasTaken/CANETA_LATAM"
-REF="${CANETA_REF:-v0.1.8}"
+REPO="https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM"
+REF="${CANETA_REF:-v0.1.9}"
 
 printf '\n  CANETA - Central de Assistência e Navegação para Escrita de Textos Avançados\n\n'
 

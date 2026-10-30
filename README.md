@@ -5,13 +5,13 @@
 
 Assistente **aberto** de escrita científica que trabalha **uma seção por vez**, com citações vindas de fontes abertas e foco em revistas **Diamond Open Access** da América Latina: gratuitas para ler **e** para publicar. É uma resposta pública a ferramentas proprietárias como o Elsevier LeapSpace, que cobram de volta pelo acesso ao conhecimento que a própria universidade produziu e revisou. Leia o [MANIFESTO](MANIFESTO.md).
 
-[![CI](https://github.com/LucaswasTaken/CANETA_LATAM/actions/workflows/ci.yml/badge.svg)](https://github.com/LucaswasTaken/CANETA_LATAM/actions/workflows/ci.yml)
-![versão](https://img.shields.io/badge/vers%C3%A3o-0.1.8-123c3a)
+[![CI](https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/actions/workflows/ci.yml/badge.svg)](https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/actions/workflows/ci.yml)
+![versão](https://img.shields.io/badge/vers%C3%A3o-0.1.9-123c3a)
 ![licença](https://img.shields.io/badge/licen%C3%A7a-AGPL--3.0-f2c14e)
 
 [Português](#português) · [Español](#español) · [English](#english)
 
-> **Estado:** versão 0.1 (alfa). Funciona de ponta a ponta, mas a interface e os formatos ainda podem mudar. Relatos de problemas são muito bem-vindos em [Issues](https://github.com/LucaswasTaken/CANETA_LATAM/issues).
+> **Estado:** versão 0.1 (alfa). Funciona de ponta a ponta, mas a interface e os formatos ainda podem mudar. Relatos de problemas são muito bem-vindos em [Issues](https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/issues).
 
 ---
 
@@ -23,20 +23,20 @@ Todos os instaladores baixam a CANETA **deste repositório**. Instalam também o
 
 **Windows: o jeito mais fácil**
 
-1. Baixe o **`CANETA-Instalador-Windows.exe`** na página de [Releases](https://github.com/LucaswasTaken/CANETA_LATAM/releases/latest).
+1. Baixe o **`CANETA-Instalador-Windows.exe`** na página de [Releases](https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/releases/latest).
 2. Dê dois cliques e depois clique em **Instalar e abrir**.
 3. O instalador ainda não tem assinatura digital paga. Se o Windows avisar que "protegeu o computador", clique em **Mais informações → Executar assim mesmo**.
 
 **Windows (PowerShell)**
 
 ```powershell
-irm https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.ps1 | iex
 ```
 
 **macOS / Linux**
 
 ```bash
-curl -LsSf https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.sh | sh
+curl -LsSf https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.sh | sh
 ```
 
 Os Releases também trazem `.zip` com `install.bat` (Windows), `Instalar CANETA.command` (macOS) e `install.sh` (Linux), para quem prefere clicar.
@@ -52,7 +52,7 @@ Os Releases também trazem `.zip` com `install.bat` (Windows), `Instalar CANETA.
 |---|---|
 | `CANETA_SEMANTIC=1` | Inclui a **busca por significado** (+≈550 MB, download único), que melhora muito as sugestões de revista para textos ensaísticos ou interdisciplinares. No `.exe`, é uma caixa de seleção. Se ela já estava ativa, as atualizações a mantêm. Também pode ser ativada depois, em Configurações. |
 | `CANETA_OCR=1` | Inclui OCR para PDFs **digitalizados** (+≈80 MB). PDFs digitais comuns não precisam dele. No `.exe`, é uma caixa de seleção. |
-| `CANETA_REF=main` | Instala outra tag ou branch. O padrão é a versão do instalador (`v0.1.8`). |
+| `CANETA_REF=main` | Instala outra tag ou branch. O padrão é a versão do instalador (`v0.1.9`). |
 
 **Desinstalar**
 
@@ -115,7 +115,7 @@ O [`latam-oa-mcp`](packages/latam-oa-mcp) também funciona sozinho, como servido
 ### Para desenvolver
 
 ```bash
-git clone https://github.com/LucaswasTaken/CANETA_LATAM && cd CANETA_LATAM
+git clone https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM && cd CANETA_LATAM
 uv sync
 uv run caneta
 uv run pytest
@@ -151,8 +151,8 @@ CANETA es un asistente **abierto** de escritura científica, **sección por secc
 - La IA es opcional: de pago (Claude, Codex), gratuita (NVIDIA NIM, Codex gratuito), local (Ollama) o **sin IA**.
 
 **Instalación:**
-- **Windows:** descarga `CANETA-Instalador-Windows.exe` en [Releases](https://github.com/LucaswasTaken/CANETA_LATAM/releases/latest), o ejecuta `irm https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.ps1 | iex`.
-- **macOS y Linux:** `curl -LsSf https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.sh | sh`.
+- **Windows:** descarga `CANETA-Instalador-Windows.exe` en [Releases](https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/releases/latest), o ejecuta `irm https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.ps1 | iex`.
+- **macOS y Linux:** `curl -LsSf https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.sh | sh`.
 - Luego ejecuta `caneta`.
 
 ## English
@@ -166,6 +166,6 @@ CANETA is an **open** scientific writing assistant that works **one section at a
 - AI is optional: paid (Claude, Codex), free (NVIDIA NIM, free Codex), local (Ollama) or **no AI**.
 
 **Install:**
-- **Windows:** download `CANETA-Instalador-Windows.exe` from [Releases](https://github.com/LucaswasTaken/CANETA_LATAM/releases/latest), or run `irm https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.ps1 | iex`.
-- **macOS and Linux:** `curl -LsSf https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.sh | sh`.
+- **Windows:** download `CANETA-Instalador-Windows.exe` from [Releases](https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/releases/latest), or run `irm https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.ps1 | iex`.
+- **macOS and Linux:** `curl -LsSf https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.sh | sh`.
 - Then run `caneta`.

@@ -1,12 +1,12 @@
 # CANETA - instalador para Windows (PowerShell)
 #   Na pasta de release:  clique duas vezes em install.bat (ou: powershell -ExecutionPolicy Bypass -File install.ps1)
-#   Pela internet:        irm https://raw.githubusercontent.com/LucaswasTaken/CANETA_LATAM/main/install.ps1 | iex
+#   Pela internet:        irm https://raw.githubusercontent.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM/main/install.ps1 | iex
 # Instala o uv (que traz o proprio Python), baixa a CANETA do GitHub, cria atalho no Menu Iniciar e abre o app.
 # Opcoes: $env:CANETA_REF = "main" (ou outra tag/branch); $env:CANETA_SOURCE = pasta local do codigo.
 
 $ErrorActionPreference = "Stop"
-$repo = "https://github.com/LucaswasTaken/CANETA_LATAM"
-$ref = if ($env:CANETA_REF) { $env:CANETA_REF } else { "v0.1.8" }
+$repo = "https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM"
+$ref = if ($env:CANETA_REF) { $env:CANETA_REF } else { "v0.1.9" }
 
 Write-Host ""
 Write-Host "  CANETA - Central de Assistencia e Navegacao para Escrita de Textos Avancados" -ForegroundColor Green

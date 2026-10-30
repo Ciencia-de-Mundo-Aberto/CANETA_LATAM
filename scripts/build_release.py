@@ -77,7 +77,7 @@ DEPOIS DE INSTALAR
 DESINSTALAR
   uv tool uninstall caneta
 
-Código: https://github.com/LucaswasTaken/CANETA_LATAM
+Código: https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM
 AGPL-3.0 (código) · CC BY 4.0 (textos) · Leia o MANIFESTO.md
 """
 

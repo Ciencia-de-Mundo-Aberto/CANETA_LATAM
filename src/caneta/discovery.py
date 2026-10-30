@@ -151,7 +151,7 @@ def read_fulltext(project: Project, ref: dict) -> str:
 # ------------------------------------------------------------------ completing references without an abstract
 OPENALEX = "https://api.openalex.org"
 CROSSREF = "https://api.crossref.org"
-HEADERS = {"User-Agent": "CANETA (https://github.com/LucaswasTaken/CANETA_LATAM)"}
+HEADERS = {"User-Agent": "CANETA (https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM)"}
 PAGE_CHARS = 4000
 
 
