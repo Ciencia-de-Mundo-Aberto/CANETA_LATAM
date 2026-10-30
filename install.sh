@@ -8,7 +8,7 @@
 set -eu
 
 REPO="https://github.com/Ciencia-de-Mundo-Aberto/CANETA_LATAM"
-REF="${CANETA_REF:-v0.1.9}"
+REF="${CANETA_REF:-v0.1.10}"
 
 printf '\n  CANETA - Central de Assistência e Navegação para Escrita de Textos Avançados\n\n'
 
