@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from .base import Provider
 
-MAX_TOKENS = 4096
+MAX_TOKENS = 8192
+# Nemotron 3.x (NVIDIA NIM) reason before answering and can spend the whole token budget thinking, leaving an
+# empty reply; for section-sized reviews and edits a direct answer is as good and many times faster
+NO_THINKING = {"chat_template_kwargs": {"enable_thinking": False}}
 
 
 class AnthropicAPI(Provider):
@@ -23,6 +26,19 @@ class AnthropicAPI(Provider):
         return "".join(block.text for block in msg.content if getattr(block, "type", "") == "text").strip()
 
 
+class ReplyCutOff(RuntimeError):
+    pass
+
+
+def _reply(resp) -> str:
+    choice = resp.choices[0]
+    text = (choice.message.content or "").strip()
+    if not text and choice.finish_reason == "length":
+        raise ReplyCutOff("o modelo usou todo o limite de resposta raciocinando e não chegou a responder — "
+                          "tente de novo ou escolha outro modelo em Configurações")
+    return text
+
+
 class OpenAICompat(Provider):
     """OpenAI, NVIDIA NIM (https://integrate.api.nvidia.com/v1) and Ollama (http://localhost:11434/v1)."""
 
@@ -38,14 +54,26 @@ class OpenAICompat(Provider):
         messages = ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}]
         client = self.client(timeout)
         kwargs = {"model": self.model, "messages": messages, "max_tokens": MAX_TOKENS, "temperature": 0.3}
+        if self.name == "nvidia-nim":
+            kwargs["extra_body"] = NO_THINKING
+
+        def create(**extra):
+            try:
+                return client.chat.completions.create(**kwargs, **extra)
+            except Exception:
+                if "extra_body" not in kwargs:
+                    raise
+                kwargs.pop("extra_body")  # a model whose template does not take the switch
+                return client.chat.completions.create(**kwargs, **extra)
+
         if json_mode:
             try:
-                resp = client.chat.completions.create(response_format={"type": "json_object"}, **kwargs)
-                return (resp.choices[0].message.content or "").strip()
+                return _reply(create(response_format={"type": "json_object"}))
+            except ReplyCutOff:
+                raise
             except Exception:  # noqa: BLE001 - not every server supports json mode; the prompt asks for JSON anyway
                 pass
-        resp = client.chat.completions.create(**kwargs)
-        return (resp.choices[0].message.content or "").strip()
+        return _reply(create())
 
     def list_models(self) -> list[str]:
         return sorted(m.id for m in self.client(30).models.list().data)

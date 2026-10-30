@@ -64,7 +64,7 @@
  "cli_help": "CANETA runs the tool in the background without access to your files: only the section text and the sources found are sent.",
  "model": "Model",
  "model_ph": "leave empty to use the recommended one",
- "recommended_models": "Recommended: claude-haiku-5-5 (Claude) · gpt-6-luna (Codex/OpenAI) · nvidia/nemotron-3-super-120b-a12b (NVIDIA).",
+ "recommended_models": "Recommended: claude-haiku-5-5 (Claude) · gpt-6-luna (Codex/OpenAI) · nvidia/nemotron-3.5-lightning-30b-a3b (NVIDIA).",
  "base_url": "Server address",
  "base_url_ph": "provider default",
  "test_connection": "Test connection",

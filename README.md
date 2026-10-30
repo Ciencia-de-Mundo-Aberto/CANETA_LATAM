@@ -91,7 +91,7 @@ uv tool uninstall caneta
 | Modo | Opções | Modelo recomendado |
 |---|---|---|
 | **Pago** | Claude CLI, Codex CLI (se você já usa), chave da API Anthropic, chave da API OpenAI | `claude-haiku-5-5`, `gpt-6-luna` |
-| **Gratuito** | NVIDIA NIM (chave gratuita em [build.nvidia.com](https://build.nvidia.com); botão **Testar modelos** para os Nemotron), Codex CLI com conta gratuita do ChatGPT | `nvidia/nemotron-3-super-120b-a12b`, `gpt-6-luna` |
+| **Gratuito** | NVIDIA NIM (chave gratuita em [build.nvidia.com](https://build.nvidia.com); botão **Testar modelos** para os Nemotron), Codex CLI com conta gratuita do ChatGPT | `nvidia/nemotron-3.5-lightning-30b-a3b`, `gpt-6-luna` |
 | **Local** | Ollama, se você tiver hardware | o que você instalar |
 | **Sem IA** | A escrita é sua; a CANETA busca citações, sugere revistas, verifica a fundamentação e corrige a gramática (LanguageTool) | — |
 

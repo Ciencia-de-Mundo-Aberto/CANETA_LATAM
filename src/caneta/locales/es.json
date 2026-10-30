@@ -64,7 +64,7 @@
  "cli_help": "CANETA llama a la herramienta en segundo plano, sin acceso a tus archivos: solo se envía el texto de la sección y las fuentes encontradas.",
  "model": "Modelo",
  "model_ph": "déjalo vacío para usar el recomendado",
- "recommended_models": "Recomendados: claude-haiku-5-5 (Claude) · gpt-6-luna (Codex/OpenAI) · nvidia/nemotron-3-super-120b-a12b (NVIDIA).",
+ "recommended_models": "Recomendados: claude-haiku-5-5 (Claude) · gpt-6-luna (Codex/OpenAI) · nvidia/nemotron-3.5-lightning-30b-a3b (NVIDIA).",
  "base_url": "Dirección del servidor",
  "base_url_ph": "por defecto del proveedor",
  "test_connection": "Probar conexión",

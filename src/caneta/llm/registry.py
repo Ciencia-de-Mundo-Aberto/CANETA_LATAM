@@ -5,12 +5,16 @@ Edit this table (or pick another model in Settings) when catalogs change."""
 
 from __future__ import annotations
 
+import re
+
 from .. import config
 from .api_providers import AnthropicAPI, OpenAICompat
 from .base import NullProvider, Provider
 from .cli_agents import ClaudeCLI, CodexCLI, find_binary
 
 NIM_URL = "https://integrate.api.nvidia.com/v1"
+# models that classify, embed or read documents: they answer "safe" or vectors, never a review
+NOT_CHAT = re.compile(r"safety|guard|embed|rerank|retriev|reward|parse|ocr|pii", re.I)
 OLLAMA_URL = "http://localhost:11434/v1"
 
 PROVIDERS: dict[str, dict] = {
@@ -23,7 +27,7 @@ PROVIDERS: dict[str, dict] = {
     "openai-api": {"group": "paid", "label": "API OpenAI (chave)", "needs_key": True,
                    "default_model": "gpt-6-luna", "key_url": "https://platform.openai.com/api-keys"},
     "nvidia-nim": {"group": "free", "label": "NVIDIA NIM (chave gratuita)", "needs_key": True,
-                   "default_model": "nvidia/nemotron-3-super-120b-a12b", "base_url": NIM_URL,
+                   "default_model": "nvidia/nemotron-3.5-lightning-30b-a3b", "base_url": NIM_URL,
                    "key_url": "https://build.nvidia.com", "model_filter": "nemotron"},
     "codex-free": {"group": "free", "label": "Codex CLI com conta gratuita do ChatGPT", "needs_key": False,
                    "default_model": "gpt-6-luna", "binary": "codex"},
@@ -74,7 +78,8 @@ def list_models(provider_id: str, api_key: str | None = None, base_url: str | No
         return [spec["default_model"]] if spec["default_model"] else []
     models = prov.list_models()
     flt = spec.get("model_filter")
-    return [m for m in models if flt in m.lower()] if flt else models
+    models = [m for m in models if flt in m.lower()] if flt else models
+    return [m for m in models if not NOT_CHAT.search(m)]
 
 
 def test_models(provider_id: str, models: list[str], api_key: str | None = None) -> list[dict]:
